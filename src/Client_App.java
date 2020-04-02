@@ -122,7 +122,10 @@ public class Client_App {
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                customer.deleteCustomer();
+                int row1= table.getSelectedRow();
+                Object deleteName=table.getValueAt(row1,1);
+                Object deletePhone=table.getValueAt(row1,2);
+                customer.deleteCustomer(deleteName,deletePhone);
             }
         });
         tablePanel.add(deleteBtn);

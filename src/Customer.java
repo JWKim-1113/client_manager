@@ -85,14 +85,15 @@ public class Customer {
             System.out.println("Table successfully created");
         }
     }
-    public static void deleteCustomer(){
+    public static void deleteCustomer(Object deleteName,Object deletePhone){
         try {
             Connection con = getConnection();
             PreparedStatement deleteCustomer = con.prepareStatement(
-                    "DELETE FROM TABLE WHERE " +
-                            "customer(1) = '1'"
+                    "DELETE FROM customer WHERE phone=? AND name=?"
             );
-            deleteCustomer.execute();
+            deleteCustomer.setString(1,(String) deletePhone);
+            deleteCustomer.setString(2,(String) deleteName);
+            deleteCustomer.executeUpdate();
         }catch(Exception e) {
             System.out.println(e.getMessage());
         }finally{
@@ -103,9 +104,9 @@ public class Customer {
     public static Connection getConnection(){
         try{
             String driver = "com.mysql.cj.jdbc.Driver";
-            String url = "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12329367";
-            String user = "sql12329367";
-            String pass = "DY6wUJICry";
+            String url = "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12329929";
+            String user = "sql12329929";
+            String pass = "rhfehDcszN";
             Class.forName(driver);
             Connection con = DriverManager.getConnection(url,user,pass);
             System.out.println("The Connection Successful");

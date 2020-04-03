@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 //a
+//민서
 public class Customer {
     /*public Customer(String nameText, String ageText, String phoneText, String birthDayText, String genderText, String noteText) {
     }*/

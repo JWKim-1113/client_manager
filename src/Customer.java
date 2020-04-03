@@ -90,6 +90,46 @@ public class Customer {
             System.out.println("Table successfully created");
         }
     }*/
+    //테이블생성 QUERRY(UNIQUE INDEX 추가)
+/*
+    public static void createTable(){
+        try{
+            Connection con = getConnection();
+            PreparedStatement createTable = con.prepareStatement(
+                "CREATE TABLE IF NOT EXISTS "+
+                        "customer(id int NOT NULL AUTO_INCREMENT,"+
+                        "name varChar(255),"+
+                        "phone varChar(255),"+
+                        "gender varChar(255),"+
+                        "age varChar(255),"+
+                        "note varChar(255),"+
+                        "PRIMARY KEY(id),"+
+                        "UNIQUE INDEX(phone))"
+            );
+            createTable.execute();
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }finally{
+            System.out.println("Table successfully created");
+        }
+    }*/
+
+    //테이블제거함수
+    /*
+    public static void deleteTable() {
+       try {
+          Connection con = getConnection();
+          PreparedStatement deleteTable = con.prepareStatement(
+                "DROP TABLE customer "
+                );
+          deleteTable.executeUpdate();
+
+       }catch(Exception e) {
+          System.out.println(e.getMessage());
+       }finally {
+          System.out.println("Table successfully deleted");
+       }
+    }*/
 
     public static void deleteCustomer(Object deleteName,Object deletePhone){
         try {

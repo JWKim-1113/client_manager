@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -108,6 +109,7 @@ public class Client_App {
         String[][] data = customer.getCustomers();
         String[] headers = new String[]{"ID","Name","Phone","Gender","Age","Note"};
         JTable table = new JTable(data,headers);
+//        table.setModel(new DefaultTableModel(data,headers));
         table.setBounds(0,300,800,400);
         table.setRowHeight(30);
         table.setFont(new Font("Sanserif",Font.BOLD,15));
@@ -127,6 +129,12 @@ public class Client_App {
                 Object deleteName=table.getValueAt(row1,1);
                 Object deletePhone=table.getValueAt(row1,2);
                 customer.deleteCustomer(deleteName,deletePhone);
+                table.setModel(new DefaultTableModel(customer.getCustomers(),headers));
+
+
+                tablePanel.repaint();
+                frame.repaint();
+                frame.validate();
             }
         });
         tablePanel.add(deleteBtn);
@@ -147,12 +155,12 @@ public class Client_App {
                 trs.setRowFilter(RowFilter.regexFilter(val)); // regular expression 을 통해 string 값이 정리가된다
             }
         });
-
+        // 0번열 (name) 은 setPreferredWidth(100)은 100보다 사이즈가 더 커질경우 자동으로 테이블의 크기를 조절
         TableColumnModel columnModels = table.getColumnModel();
         columnModels.getColumn(0).setPreferredWidth(10);
-        columnModels.getColumn(1).setPreferredWidth(100); // 0번열 (name) 은 setPreferredWidth(100)은 100보다 사이즈가 더 커질경우 자동으로 테이블의 크기를 조절
-        columnModels.getColumn(3).setPreferredWidth(50); // 2번열 (gender) 은 50으로
-        columnModels.getColumn(4).setPreferredWidth(10); // 3번열 (age) 는 10으로
+        columnModels.getColumn(1).setPreferredWidth(100);
+        columnModels.getColumn(3).setPreferredWidth(50);
+        columnModels.getColumn(4).setPreferredWidth(10);
         tablePanel.setVisible(false);
 
         // submit(제출)버튼 생성 및 action
@@ -171,7 +179,6 @@ public class Client_App {
                     profilePanel.setVisible(false);
                 }
                 else{
-
                 }
             }
         });

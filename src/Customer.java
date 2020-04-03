@@ -64,6 +64,7 @@ public class Customer {
             JOptionPane.showMessageDialog(null,"Your data has been saved successfully");
             return true;
         }catch(Exception e){
+            System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(null,e.getMessage());
             return false;
         }

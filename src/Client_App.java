@@ -167,7 +167,6 @@ public class Client_App {
                 String genderText = comboBoxGender.getSelectedItem().toString();
                 String noteText = textNote.getText();
                 Boolean flag = customer.createCustomer(nameText,phoneText,genderText,ageText,noteText);
-//                JOptionPane.showMessageDialog(null,"Your data has been saved successfully");
                 if(flag==true){
                     profilePanel.setVisible(false);
                 }

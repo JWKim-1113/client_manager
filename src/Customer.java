@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -49,7 +50,7 @@ public class Customer {
             return null;
         }
     }
-    public static void createCustomer(String name,String phone,String gender,String age,String note){
+    public static Boolean createCustomer(String name,String phone,String gender,String age,String note){
         try{
             Connection con = getConnection();
             PreparedStatement insert = con.prepareStatement(""
@@ -60,12 +61,16 @@ public class Customer {
             );
             insert.executeUpdate();
             System.out.println("The data has been saved!");
+            JOptionPane.showMessageDialog(null,"Your data has been saved successfully");
+            return true;
         }catch(Exception e){
-            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null,e.getMessage());
+            return false;
         }
     }
 
-    public static void createTable(){
+    //테이블생성 QUERRY
+/*    public static void createTable(){
         try{
             Connection con = getConnection();
             PreparedStatement createTable = con.prepareStatement(
@@ -84,7 +89,8 @@ public class Customer {
         }finally{
             System.out.println("Table successfully created");
         }
-    }
+    }*/
+
     public static void deleteCustomer(Object deleteName,Object deletePhone){
         try {
             Connection con = getConnection();

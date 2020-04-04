@@ -37,15 +37,23 @@ public class Client_App {
         Customer customer = new Customer();
 
         frame = new JFrame();
+        frame.setBounds(100, 100, 1077, 706);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		ImagePanel welcomePanel = new ImagePanel(new ImageIcon("./img/background.jpg").getImage());
+        
+		JPanel profilePanel, tablePanel, homePanel;
 
         //로그인화면(첫화면) panel
-        ImagePanel welcomePanel = new ImagePanel(new ImageIcon("./img/background.jpg").getImage());
+        
         frame.add(welcomePanel);
 
         //************************************* profile 등록 화면 ******************************************
-        JPanel profilePanel = new JPanel();
+        profilePanel = new JPanel();
         profilePanel.setBackground(Color.WHITE);
         profilePanel.setBounds(0,0, welcomePanel.getWidth(),welcomePanel.getHeight());
+        frame.getContentPane().add(profilePanel);
         profilePanel.setLayout(null);
         profilePanel.setVisible(false);
 
@@ -103,10 +111,40 @@ public class Client_App {
         textNote.setBorder(BorderFactory.createLineBorder(Color.black,1));
         profilePanel.add(note);
         profilePanel.add(textNote);
+        
+      //************************************* profile 등록 성공시 첫 로그인 메인 화면 ******************************************
 
+        homePanel = new JPanel();
+		homePanel.setBackground(Color.WHITE);
+		homePanel.setBounds(0, 0, 1059, 659);
+		frame.getContentPane().add(homePanel);
+		homePanel.setLayout(null);
+		
+		JLabel main = new JLabel("Welcome main ");
+		main.setVerticalAlignment(SwingConstants.TOP);
+        main.setBounds(484,36,167,29);
+        main.setFont(new Font("Lato",Font.BOLD,20));
+        homePanel.add(main);
+        
+        JButton btnNewButton = new JButton("\uBA54\uC2E0\uC800");
+        btnNewButton.setBounds(46, 157, 297, 67);
+        homePanel.add(btnNewButton);
+        
+        JButton btnNewButton_1 = new JButton("\uAC8C\uC2DC\uD310");
+        btnNewButton_1.setBounds(46, 272, 297, 67);
+        homePanel.add(btnNewButton_1);
+        
+        JButton btnNewButton_2 = new JButton("");
+        btnNewButton_2.setBounds(46, 389, 297, 67);
+        homePanel.add(btnNewButton_2);
+        
+        JButton btnNewButton_3 = new JButton("");
+        btnNewButton_3.setBounds(46, 506, 297, 67);
+        homePanel.add(btnNewButton_3);
 
+       
         //************************************* 관리자용 TABLE 화면 ******************************************
-        JPanel tablePanel = new JPanel();
+        tablePanel = new JPanel();
         tablePanel.setBounds(0,0,welcomePanel.getWidth(),welcomePanel.getHeight());
         String[][] data = customer.getCustomers();
         String[] headers = new String[]{"ID","Name","Phone","Gender","Age","Note"};
@@ -172,6 +210,7 @@ public class Client_App {
                 Boolean flag = customer.createCustomer(nameText,phoneText,genderText,ageText,noteText);
                 if(flag==true){
                     profilePanel.setVisible(false);
+                    homePanel.setVisible(true);
                 }
                 else{
 
@@ -181,6 +220,8 @@ public class Client_App {
         profilePanel.add(submitBtn);
 
         frame.getContentPane().add(profilePanel);
+        
+      
 
         //************************************* LOGIN 화면 ******************************************
 
@@ -210,11 +251,13 @@ public class Client_App {
                     System.out.println("Login Successfully");
                     welcomePanel.setVisible(false);
                     profilePanel.setVisible(true);
+                    homePanel.setVisible(false);
                 }
                 else if(textID.getText().equals("admin")&&Arrays.equals(textPW.getPassword(),"admin".toCharArray())){
                     System.out.println("administrator");
                     welcomePanel.setVisible(false);
                     tablePanel.setVisible(true);
+                    homePanel.setVisible(false);
 
                 }
                 else {

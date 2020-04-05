@@ -47,7 +47,7 @@ public class Client_App {
 
         //로그인화면(첫화면) panel
         
-        frame.add(welcomePanel);
+        frame.getContentPane().add(welcomePanel);
 
         //************************************* profile 등록 화면 ******************************************
         profilePanel = new JPanel();
@@ -112,13 +112,14 @@ public class Client_App {
         profilePanel.add(note);
         profilePanel.add(textNote);
         
-      //************************************* profile 등록 성공시 첫 로그인 메인 화면 ******************************************
+        //************************************* profile 등록 성공시 첫 로그인 메인 화면 ******************************************
 
         homePanel = new JPanel();
 		homePanel.setBackground(Color.WHITE);
 		homePanel.setBounds(0, 0, 1059, 659);
 		frame.getContentPane().add(homePanel);
 		homePanel.setLayout(null);
+		homePanel.setVisible(false);
 		
 		JLabel main = new JLabel("Welcome main ");
 		main.setVerticalAlignment(SwingConstants.TOP);
@@ -140,8 +141,7 @@ public class Client_App {
         
         JButton btnNewButton_3 = new JButton("");
         btnNewButton_3.setBounds(46, 506, 297, 67);
-        homePanel.add(btnNewButton_3);
-
+        homePanel.add(btnNewButton_3); 
        
         //************************************* 관리자용 TABLE 화면 ******************************************
         tablePanel = new JPanel();
@@ -222,7 +222,6 @@ public class Client_App {
         frame.getContentPane().add(profilePanel);
         
       
-
         //************************************* LOGIN 화면 ******************************************
 
         //로그인화면 ID label
@@ -251,13 +250,13 @@ public class Client_App {
                     System.out.println("Login Successfully");
                     welcomePanel.setVisible(false);
                     profilePanel.setVisible(true);
-                    homePanel.setVisible(false);
+//                    homePanel.setVisible(false);
                 }
                 else if(textID.getText().equals("admin")&&Arrays.equals(textPW.getPassword(),"admin".toCharArray())){
                     System.out.println("administrator");
                     welcomePanel.setVisible(false);
                     tablePanel.setVisible(true);
-                    homePanel.setVisible(false);
+//                    homePanel.setVisible(false);
 
                 }
                 else {
@@ -277,6 +276,9 @@ public class Client_App {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+    
+    
+    
     //************************************* 상단 메뉴바 ******************************************
     public JMenuBar menuBar(){
         JMenuBar bar = new JMenuBar();

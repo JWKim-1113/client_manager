@@ -12,7 +12,11 @@ import java.util.Arrays;
 
 public class Client_App {
     private JFrame frame;
-
+    private JPanel welcomePanel;
+    private JPanel profilePanel;
+    private JPanel tablePanel;
+    private JPanel homePanel;
+    
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -39,9 +43,9 @@ public class Client_App {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		ImagePanel welcomePanel = new ImagePanel(new ImageIcon("./img/background.jpg").getImage());
+		ImagePanel welcomePanel = new ImagePanel(new ImageIcon("C:\\Works\\client_manager\\img/background.jpg").getImage());
         
-		JPanel profilePanel, tablePanel, homePanel;
+//		JPanel profilePanel, tablePanel, homePanel;
 
         //로그인화면(첫화면) panel
         
@@ -96,6 +100,7 @@ public class Client_App {
         JLabel gender = new JLabel("Gender");
         gender.setFont(new Font("Lato",Font.BOLD,20));
         gender.setBounds(100,550,85,40);
+        
         JComboBox comboBoxGender = new JComboBox(new String[]{"Male","Female"});
         comboBoxGender.setBounds(200,550,140,40);
         profilePanel.add(gender);
@@ -104,6 +109,7 @@ public class Client_App {
         JLabel note = new JLabel("Note");
         note.setFont(new Font("Lato",Font.BOLD,20));
         note.setBounds(400,150,85,40);
+        
         JTextArea textNote = new JTextArea();
         textNote.setBounds(500,150,160,160);
         textNote.setBorder(BorderFactory.createLineBorder(Color.black,1));
@@ -244,9 +250,9 @@ public class Client_App {
         textPW.setBounds(400,463,160,25);
         //로그인화면 Login Button
         JButton logBtn =  new JButton("LogIn");
-        logBtn.setIcon(new ImageIcon("./img/loginbtn.jpg"));
-        logBtn.setPressedIcon(new ImageIcon("./img/loginbtn_click.jpg"));
-        logBtn.setBounds(380,523,175,57);
+        logBtn.setIcon(new ImageIcon("C:\\Works\\client_manager\\img/loginbtn.png"));
+        logBtn.setPressedIcon(new ImageIcon("C:\\Works\\client_manager\\img/loginbtn_click.png"));
+        logBtn.setBounds(380,523,170,50);
         logBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -274,7 +280,9 @@ public class Client_App {
         welcomePanel.add(textPW);
         welcomePanel.add(logBtn);
 
-        frame.setJMenuBar(menuBar());
+        
+   //****************************************************************************************
+        frame.setJMenuBar(menuBar(welcomePanel));
         frame.setSize(welcomePanel.getWidth(),welcomePanel.getHeight());
         frame.setResizable(true);
         frame.setLocationRelativeTo(null);
@@ -284,19 +292,30 @@ public class Client_App {
     
     
     //************************************* 상단 메뉴바 ******************************************
-    public JMenuBar menuBar(){
+    public JMenuBar menuBar(JPanel panel) {
+    	
+
+//		ImagePanel welcomePanel = new ImagePanel(new ImageIcon("./img/background.jpg").getImage());
+//		frame.getContentPane().add(welcomePanel);
+
+    	
         JMenuBar bar = new JMenuBar();
         JMenu fileMenu = new JMenu("File");
         JMenu aboutMenu = new JMenu("About");
-
+        
         bar.add(fileMenu);
         bar.add(aboutMenu);
-
+    
+        
         JMenuItem openFile = new JMenuItem("Open");
-        JMenuItem exit = new JMenuItem("Exit");
+        JMenuItem exit = new JMenuItem("Exit"); 
+        JMenuItem logout = new JMenuItem("logout");
+        
         fileMenu.add(openFile);
+        fileMenu.add(logout);
         fileMenu.addSeparator();
         fileMenu.add(exit);
+        
 
         exit.addActionListener(new ActionListener() {
             @Override
@@ -304,6 +323,17 @@ public class Client_App {
                 System.exit(0);
             }
         });
+        
+        logout.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				profilePanel.setVisible(false);
+				homePanel.setVisible(false);
+				tablePanel.setVisible(false);
+				panel.setVisible(true);
+			}
+		});
 
         return bar;
     }

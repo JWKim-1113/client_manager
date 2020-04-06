@@ -131,11 +131,11 @@ public class Client_App {
         main.setFont(new Font("Lato",Font.BOLD,20));
         homePanel.add(main);
         
-        JButton btnNewButton = new JButton("\uBA54\uC2E0\uC800");
+        JButton btnNewButton = new JButton("채팅");
         btnNewButton.setBounds(46, 157, 297, 67);
         homePanel.add(btnNewButton);
         
-        JButton btnNewButton_1 = new JButton("\uAC8C\uC2DC\uD310");
+        JButton btnNewButton_1 = new JButton("게시판");
         btnNewButton_1.setBounds(46, 272, 297, 67);
         homePanel.add(btnNewButton_1);
         
@@ -301,7 +301,7 @@ public class Client_App {
             public void actionPerformed(ActionEvent e) {
                 int row1= table.getSelectedRow();
                 Object deleteId=table.getValueAt(row1,0);
-                Object deletePhone=table.getValueAt(row1,1);
+                Object deletePhone=table.getValueAt(row1,2);
                 customer.deleteCustomer(deleteId,deletePhone);
                 table.setModel(new DefaultTableModel(customer.getCustomers(),headers));
 
@@ -387,8 +387,8 @@ public class Client_App {
         textPW.setBounds(400,463,160,25);
         //로그인화면 Login Button
         JButton logBtn =  new JButton("LogIn");
-        logBtn.setIcon(new ImageIcon("C:\\Works\\client_manager\\img/loginbtn.png"));
-        logBtn.setPressedIcon(new ImageIcon("C:\\Works\\client_manager\\img/loginbtn_click.png"));
+        logBtn.setIcon(new ImageIcon("./img/loginbtn.png"));
+        logBtn.setPressedIcon(new ImageIcon("./img/loginbtn_click.png"));
         logBtn.setBounds(380,523,170,50);
         logBtn.addActionListener(new ActionListener() {
             @Override

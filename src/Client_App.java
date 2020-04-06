@@ -38,7 +38,7 @@ public class Client_App {
         frame.setBounds(100, 100, 1077, 706);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
-		
+		frame.setResizable(false);
 		ImagePanel welcomePanel = new ImagePanel(new ImageIcon("./img/background.jpg").getImage());
         
 		JPanel profilePanel, tablePanel, homePanel;
@@ -54,6 +54,7 @@ public class Client_App {
         frame.getContentPane().add(profilePanel);
         profilePanel.setLayout(null);
         profilePanel.setVisible(false);
+
 
         //메인패널 상단 label
         JLabel welcomeMain = new JLabel("Welcome main panel");
@@ -110,8 +111,7 @@ public class Client_App {
         profilePanel.add(note);
         profilePanel.add(textNote);
         
-        //************************************* profile 등록 성공시 첫 로그인 메인 화면 ******************************************
-
+        //************************************* home 패널 ******************************************
         homePanel = new JPanel();
 		homePanel.setBackground(Color.WHITE);
 		homePanel.setBounds(0, 0, 1059, 659);
@@ -125,11 +125,18 @@ public class Client_App {
         main.setFont(new Font("Lato",Font.BOLD,20));
         homePanel.add(main);
         
-        JButton btnNewButton = new JButton("\uBA54\uC2E0\uC800");
+        JButton btnNewButton = new JButton("채팅");
         btnNewButton.setBounds(46, 157, 297, 67);
+        btnNewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Server server = new Server();
+                Client client = new Client();
+            }
+        });
         homePanel.add(btnNewButton);
         
-        JButton btnNewButton_1 = new JButton("\uAC8C\uC2DC\uD310");
+        JButton btnNewButton_1 = new JButton("게시판");
         btnNewButton_1.setBounds(46, 272, 297, 67);
         homePanel.add(btnNewButton_1);
         
@@ -147,7 +154,7 @@ public class Client_App {
         String[][] data = customer.getCustomers();
         String[] headers = new String[]{"ID","Name","Phone","Gender","Age","Note"};
         JTable table = new JTable(data,headers);
-//        table.setModel(new DefaultTableModel(data,headers));
+
         table.setBounds(0,300,800,400);
         table.setRowHeight(30);
         table.setFont(new Font("Sanserif",Font.BOLD,15));
@@ -168,8 +175,11 @@ public class Client_App {
                 Object deletePhone=table.getValueAt(row1,2);
                 customer.deleteCustomer(deleteName,deletePhone);
                 table.setModel(new DefaultTableModel(customer.getCustomers(),headers));
-
-
+                TableColumnModel columnModels = table.getColumnModel();
+                columnModels.getColumn(0).setPreferredWidth(10);
+                columnModels.getColumn(1).setPreferredWidth(100);
+                columnModels.getColumn(3).setPreferredWidth(50);
+                columnModels.getColumn(4).setPreferredWidth(10);
                 tablePanel.repaint();
                 frame.repaint();
                 frame.validate();
@@ -224,8 +234,7 @@ public class Client_App {
         profilePanel.add(submitBtn);
 
         frame.getContentPane().add(profilePanel);
-        
-      
+
         //************************************* LOGIN 화면 ******************************************
 
         //로그인화면 ID label
@@ -256,6 +265,12 @@ public class Client_App {
                     profilePanel.setVisible(true);
 //                    homePanel.setVisible(false);
                 }
+                else if(textID.getText().equals("2")&&Arrays.equals(textPW.getPassword(),"2".toCharArray())){
+                    System.out.println("Login Successfully");
+                    welcomePanel.setVisible(false);
+                    profilePanel.setVisible(false);
+                    homePanel.setVisible(true);
+                }
                 else if(textID.getText().equals("admin")&&Arrays.equals(textPW.getPassword(),"admin".toCharArray())){
                     System.out.println("administrator");
                     welcomePanel.setVisible(false);
@@ -280,9 +295,7 @@ public class Client_App {
         frame.setLocationRelativeTo(null);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    
-    
-    
+
     //************************************* 상단 메뉴바 ******************************************
     public JMenuBar menuBar(){
         JMenuBar bar = new JMenuBar();
@@ -304,7 +317,6 @@ public class Client_App {
                 System.exit(0);
             }
         });
-
         return bar;
     }
 }

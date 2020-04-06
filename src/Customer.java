@@ -4,25 +4,24 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
-//a
-//민서
+
 public class Customer {
     /*public Customer(String nameText, String ageText, String phoneText, String birthDayText, String genderText, String noteText) {
     }*/
 
-   /* public static void main(String[] args) {
-        createTable();
-        createCustomer("danny","01039227048","male","23","note...");
-        ArrayList<String> list = getCustomers();
-        for(String item:list){
-            System.out.println(item);
-        }
-        createCustomer("peter","01039227228","Female","26","note!!!!!!!!!!!!!!!!");
-        list = getCustomers();
-        for(String item:list){
-            System.out.println(item);
-        }
-    }*/
+//    public static void main(String[] args) {
+//        createTable();
+//        createCustomer("danny","01039227048","male","23","note...");
+//        ArrayList<String> list = getCustomers();
+//        for(String item:list){
+//            System.out.println(item);
+//        }
+//        createCustomer("peter","01039227228","Female","26","note!!!!!!!!!!!!!!!!");
+//        list = getCustomers();
+//        for(String item:list){
+//            System.out.println(item);
+//        }
+//    }
 
     public static String[][] getCustomers(){
         try{
@@ -65,6 +64,7 @@ public class Customer {
             JOptionPane.showMessageDialog(null,"Your data has been saved successfully");
             return true;
         }catch(Exception e){
+            System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(null,e.getMessage());
             return false;
         }
@@ -92,7 +92,6 @@ public class Customer {
         }
     }*/
     //테이블생성 QUERRY(UNIQUE INDEX 추가)
-/*
     public static void createTable(){
         try{
             Connection con = getConnection();
@@ -113,7 +112,7 @@ public class Customer {
         }finally{
             System.out.println("Table successfully created");
         }
-    }*/
+    }
 
     //테이블제거함수
     /*
@@ -132,14 +131,14 @@ public class Customer {
        }
     }*/
 
-    public static void deleteCustomer(Object deleteName,Object deletePhone){
+    public static void deleteCustomer(Object deleteId,Object deletePhone){
         try {
             Connection con = getConnection();
             PreparedStatement deleteCustomer = con.prepareStatement(
-                    "DELETE FROM customer WHERE phone=? AND name=?"
+                    "DELETE FROM customer WHERE phone=? AND id=?"
             );
             deleteCustomer.setString(1,(String) deletePhone);
-            deleteCustomer.setString(2,(String) deleteName);
+            deleteCustomer.setString(2,(String) deleteId);
             deleteCustomer.executeUpdate();
         }catch(Exception e) {
             System.out.println(e.getMessage());
@@ -147,13 +146,44 @@ public class Customer {
             System.out.println("The data has been deleted");
         }
     }
+    	//고객 Update 함수 
+    public Boolean updateCustomer(Object Id, String updateName, String updatePhone, String updateGender, String updateAge, String updateNote) {
+    	try {
+    		Connection con = getConnection();
+    		PreparedStatement updateCustomer =con.prepareStatement(
+    				"UPDATE customer SET "
+    				+ "name =? ,"
+    				+ "phone =? ,"
+    				+ "gender =? ,"
+    				+ "age =? ,"
+    				+ "note =? "
+    				+ "WHERE id=?"
+    				);
+    		updateCustomer.setString(1, updateName);
+    		updateCustomer.setString(2, updatePhone);
+    		updateCustomer.setString(3, updateGender);
+    		updateCustomer.setString(4, updateAge);
+    		updateCustomer.setString(5, updateNote);
+    		updateCustomer.setString(6, (String)Id);
+    		updateCustomer.executeUpdate();
+    		System.out.println("The data has been updated!");
+            JOptionPane.showMessageDialog(null,"Your data has been updated successfully");
+            return true;
+    	}catch(Exception e ) {
+    		System.out.println(e.getMessage());
+    		return false;
+    	}finally {
+    		
+    	}
+		
+	}
 
     public static Connection getConnection(){
         try{
             String driver = "com.mysql.cj.jdbc.Driver";
-            String url = "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12329929";
-            String user = "sql12329929";
-            String pass = "rhfehDcszN";
+            String url = "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12330667";
+            String user = "sql12330667";
+            String pass = "6yDQHN1rWi";
             Class.forName(driver);
             Connection con = DriverManager.getConnection(url,user,pass);
             System.out.println("The Connection Successful");
@@ -163,4 +193,6 @@ public class Customer {
             return null;
         }
     }
+	
+	
 }

@@ -43,7 +43,7 @@ public class Client_App {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		ImagePanel welcomePanel = new ImagePanel(new ImageIcon("C:\\Works\\client_manager\\img/background.jpg").getImage());
+		ImagePanel welcomePanel = new ImagePanel(new ImageIcon("./img/background.jpg").getImage());
         
 //		JPanel profilePanel, tablePanel, homePanel;
 
@@ -163,24 +163,160 @@ public class Client_App {
         table.setPreferredScrollableViewportSize(new Dimension(800,400));
         //JScrollPane < 스크롤이가능한 컴포넌트로 추가한다.
         tablePanel.add(new JScrollPane(table));
+// Update 작업===========================================================================================================================
+        JButton updateBtn = new JButton("Update");
+        updateBtn.setBounds(500,700,150,40);
+        updateBtn.addActionListener(new ActionListener() {
 
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int row1=table.getSelectedRow();
+                Object id= table.getValueAt(row1, 0);
+                Object Name =table.getValueAt(row1, 1);
+                Object Phone =table.getValueAt(row1, 2);
+                Object Gender =table.getValueAt(row1, 3);
+                Object Age =table.getValueAt(row1, 4);
+                Object Note =table.getValueAt(row1, 5);
+
+                JPanel updatePanel = new JPanel();
+                updatePanel.setBounds(0,0,welcomePanel.getWidth(),welcomePanel.getHeight());
+                updatePanel.setBackground(Color.WHITE);
+                updatePanel.setLayout(null);
+
+
+                JLabel updateMain = new JLabel("Welcome updatePanel");
+                updateMain.setBounds(360,50,300,40);
+                updateMain.setFont(new Font("Lato",Font.BOLD,20));
+                updatePanel.add(updateMain);
+
+                JLabel name = new JLabel("Name");
+                name.setFont(new Font("Lato",Font.BOLD,20));
+                name.setBounds(100,150,85,40);
+
+                JTextField textName = new JTextField(10);
+                textName.setBounds(200,150,140,40);
+                textName.setText((String) Name);
+                updatePanel.add(name);
+                updatePanel.add(textName);
+
+                JLabel phone = new JLabel("Phone");
+                phone.setFont(new Font("Lato",Font.BOLD,20));
+                phone.setBounds(100,250,85,40);
+
+                JTextField textPhone = new JTextField(10);
+                textPhone.setBounds(200,250,140,40);
+                textPhone.setText((String)Phone);
+                updatePanel.add(phone);
+                updatePanel.add(textPhone);
+
+                JLabel age = new JLabel("Age");
+                age.setFont(new Font("Lato",Font.BOLD,20));
+                age.setBounds(100,350,85,40);
+
+                JTextField textAge = new JTextField(2);
+                textAge.setBounds(200,350,140,40);
+                textAge.setText((String)Age);
+                updatePanel.add(age);
+                updatePanel.add(textAge);
+//생일은 지금 사용안함
+//              JLabel birthDay = new JLabel("Birthday");
+//              birthDay.setFont(new Font("Lato",Font.BOLD,20));
+//              birthDay.setBounds(100,450,85,40);
+//
+//              JTextField textBirthDay = new JTextField(8);
+//              textBirthDay.setBounds(200,450,140,40);
+//              textBirthDay.setText();
+//              updatePanel.add(birthDay);
+//              updatePanel.add(textBirthDay);
+
+                JLabel gender = new JLabel("Gender");
+                gender.setFont(new Font("Lato",Font.BOLD,20));
+                gender.setBounds(100,550,85,40);
+
+                JComboBox comboBoxGender = new JComboBox(new String[]{"Male","Female"});
+                comboBoxGender.setBounds(200,550,140,40);
+                updatePanel.add(gender);
+                updatePanel.add(comboBoxGender);
+
+                JLabel note = new JLabel("Note");
+                note.setFont(new Font("Lato",Font.BOLD,20));
+                note.setBounds(400,150,85,40);
+
+                JTextArea textNote = new JTextArea();
+                textNote.setBounds(500,150,160,160);
+                textNote.setBorder(BorderFactory.createLineBorder(Color.black,1));
+                textNote.setText((String)Note);
+                updatePanel.add(note);
+                updatePanel.add(textNote);
+
+                JButton updateSubmitBtn =new JButton("UpdateComplete");
+                updateSubmitBtn.setBounds(500,400,150,40);
+                updateSubmitBtn.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String nameText = textName.getText();
+                        String ageText = textAge.getText();
+                        String phoneText = textPhone.getText();
+                        String genderText = comboBoxGender.getSelectedItem().toString();
+                        String noteText = textNote.getText();
+                        Boolean flag = customer.updateCustomer(id,nameText,phoneText,genderText,ageText,noteText);
+                        if(flag==true){
+                            table.setModel(new DefaultTableModel(customer.getCustomers(),headers));
+
+                            TableColumnModel columnModels = table.getColumnModel();
+                            columnModels.getColumn(0).setPreferredWidth(10);
+                            columnModels.getColumn(1).setPreferredWidth(100);
+                            columnModels.getColumn(3).setPreferredWidth(50);
+                            columnModels.getColumn(4).setPreferredWidth(10);
+
+                            tablePanel.repaint();
+                            frame.repaint();
+                            frame.validate();
+
+                            updatePanel.setVisible(false);
+                            tablePanel.setVisible(true);
+
+
+                        }
+                        else{
+                        }
+
+                    }
+                });
+
+                updatePanel.add(updateSubmitBtn);
+                tablePanel.setVisible(false);
+                updatePanel.setVisible(true);
+
+                frame.getContentPane().add(updatePanel);
+
+            }
+        });
+        //========================================================================================================================
         JButton deleteBtn = new JButton("Delete");
         deleteBtn.setBounds(500,400,150,40);
         deleteBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int row1= table.getSelectedRow();
-                Object deleteName=table.getValueAt(row1,1);
-                Object deletePhone=table.getValueAt(row1,2);
-                customer.deleteCustomer(deleteName,deletePhone);
+                Object deleteId=table.getValueAt(row1,0);
+                Object deletePhone=table.getValueAt(row1,1);
+                customer.deleteCustomer(deleteId,deletePhone);
                 table.setModel(new DefaultTableModel(customer.getCustomers(),headers));
 
+                TableColumnModel columnModels = table.getColumnModel();
+                columnModels.getColumn(0).setPreferredWidth(10);
+                columnModels.getColumn(1).setPreferredWidth(100);
+                columnModels.getColumn(3).setPreferredWidth(50);
+                columnModels.getColumn(4).setPreferredWidth(10);
 
                 tablePanel.repaint();
                 frame.repaint();
                 frame.validate();
             }
         });
+        tablePanel.add(updateBtn);
         tablePanel.add(deleteBtn);
         frame.getContentPane().add(tablePanel);
 
@@ -230,7 +366,8 @@ public class Client_App {
         profilePanel.add(submitBtn);
 
         frame.getContentPane().add(profilePanel);
-        
+
+
       
         //************************************* LOGIN 화면 ******************************************
 
@@ -279,8 +416,6 @@ public class Client_App {
         welcomePanel.add(pwLb);
         welcomePanel.add(textPW);
         welcomePanel.add(logBtn);
-
-        
    //****************************************************************************************
         frame.setJMenuBar(menuBar(welcomePanel));
         frame.setSize(welcomePanel.getWidth(),welcomePanel.getHeight());

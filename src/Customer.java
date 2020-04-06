@@ -9,19 +9,19 @@ public class Customer {
     /*public Customer(String nameText, String ageText, String phoneText, String birthDayText, String genderText, String noteText) {
     }*/
 
-   /* public static void main(String[] args) {
-        createTable();
-        createCustomer("danny","01039227048","male","23","note...");
-        ArrayList<String> list = getCustomers();
-        for(String item:list){
-            System.out.println(item);
-        }
-        createCustomer("peter","01039227228","Female","26","note!!!!!!!!!!!!!!!!");
-        list = getCustomers();
-        for(String item:list){
-            System.out.println(item);
-        }
-    }*/
+//    public static void main(String[] args) {
+//        createTable();
+//        createCustomer("danny","01039227048","male","23","note...");
+//        ArrayList<String> list = getCustomers();
+//        for(String item:list){
+//            System.out.println(item);
+//        }
+//        createCustomer("peter","01039227228","Female","26","note!!!!!!!!!!!!!!!!");
+//        list = getCustomers();
+//        for(String item:list){
+//            System.out.println(item);
+//        }
+//    }
 
     public static String[][] getCustomers(){
         try{
@@ -92,7 +92,6 @@ public class Customer {
         }
     }*/
     //테이블생성 QUERRY(UNIQUE INDEX 추가)
-/*
     public static void createTable(){
         try{
             Connection con = getConnection();
@@ -113,7 +112,7 @@ public class Customer {
         }finally{
             System.out.println("Table successfully created");
         }
-    }*/
+    }
 
     //테이블제거함수
     /*
@@ -151,9 +150,9 @@ public class Customer {
     public static Connection getConnection(){
         try{
             String driver = "com.mysql.cj.jdbc.Driver";
-            String url = "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12329929";
-            String user = "sql12329929";
-            String pass = "rhfehDcszN";
+            String url = "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12330667";
+            String user = "sql12330667";
+            String pass = "6yDQHN1rWi";
             Class.forName(driver);
             Connection con = DriverManager.getConnection(url,user,pass);
             System.out.println("The Connection Successful");

@@ -131,14 +131,14 @@ public class Customer {
        }
     }*/
 
-    public static void deleteCustomer(Object deleteName,Object deletePhone){
+    public static void deleteCustomer(Object deleteId,Object deletePhone){
         try {
             Connection con = getConnection();
             PreparedStatement deleteCustomer = con.prepareStatement(
-                    "DELETE FROM customer WHERE phone=? AND name=?"
+                    "DELETE FROM customer WHERE phone=? AND id=?"
             );
             deleteCustomer.setString(1,(String) deletePhone);
-            deleteCustomer.setString(2,(String) deleteName);
+            deleteCustomer.setString(2,(String) deleteId);
             deleteCustomer.executeUpdate();
         }catch(Exception e) {
             System.out.println(e.getMessage());
@@ -146,6 +146,37 @@ public class Customer {
             System.out.println("The data has been deleted");
         }
     }
+    	//고객 Update 함수 
+    public Boolean updateCustomer(Object Id, String updateName, String updatePhone, String updateGender, String updateAge, String updateNote) {
+    	try {
+    		Connection con = getConnection();
+    		PreparedStatement updateCustomer =con.prepareStatement(
+    				"UPDATE customer SET "
+    				+ "name =? ,"
+    				+ "phone =? ,"
+    				+ "gender =? ,"
+    				+ "age =? ,"
+    				+ "note =? "
+    				+ "WHERE id=?"
+    				);
+    		updateCustomer.setString(1, updateName);
+    		updateCustomer.setString(2, updatePhone);
+    		updateCustomer.setString(3, updateGender);
+    		updateCustomer.setString(4, updateAge);
+    		updateCustomer.setString(5, updateNote);
+    		updateCustomer.setString(6, (String)Id);
+    		updateCustomer.executeUpdate();
+    		System.out.println("The data has been updated!");
+            JOptionPane.showMessageDialog(null,"Your data has been updated successfully");
+            return true;
+    	}catch(Exception e ) {
+    		System.out.println(e.getMessage());
+    		return false;
+    	}finally {
+    		
+    	}
+		
+	}
 
     public static Connection getConnection(){
         try{
@@ -162,4 +193,6 @@ public class Customer {
             return null;
         }
     }
+	
+	
 }

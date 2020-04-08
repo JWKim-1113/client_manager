@@ -16,7 +16,7 @@ public class Client_App {
     private JPanel profilePanel;
     private JPanel tablePanel;
     private JPanel homePanel;
-    
+    static String current_id = "";
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -134,6 +134,13 @@ public class Client_App {
         JButton btnNewButton = new JButton("채팅");
         btnNewButton.setBounds(46, 157, 297, 67);
         homePanel.add(btnNewButton);
+        btnNewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Client();
+                new Server();
+            }
+        });
         
         JButton btnNewButton_1 = new JButton("게시판");
         btnNewButton_1.setBounds(46, 272, 297, 67);
@@ -163,7 +170,7 @@ public class Client_App {
         table.setPreferredScrollableViewportSize(new Dimension(800,400));
         //JScrollPane < 스크롤이가능한 컴포넌트로 추가한다.
         tablePanel.add(new JScrollPane(table));
-// Update 작업===========================================================================================================================
+        // ************************************* update 패널 ******************************************
         JButton updateBtn = new JButton("Update");
         updateBtn.setBounds(500,700,150,40);
         updateBtn.addActionListener(new ActionListener() {
@@ -218,16 +225,6 @@ public class Client_App {
                 textAge.setText((String)Age);
                 updatePanel.add(age);
                 updatePanel.add(textAge);
-//생일은 지금 사용안함
-//              JLabel birthDay = new JLabel("Birthday");
-//              birthDay.setFont(new Font("Lato",Font.BOLD,20));
-//              birthDay.setBounds(100,450,85,40);
-//
-//              JTextField textBirthDay = new JTextField(8);
-//              textBirthDay.setBounds(200,450,140,40);
-//              textBirthDay.setText();
-//              updatePanel.add(birthDay);
-//              updatePanel.add(textBirthDay);
 
                 JLabel gender = new JLabel("Gender");
                 gender.setFont(new Font("Lato",Font.BOLD,20));
@@ -293,7 +290,7 @@ public class Client_App {
 
             }
         });
-        //========================================================================================================================
+        //*************************************************************************************************
         JButton deleteBtn = new JButton("Delete");
         deleteBtn.setBounds(500,400,150,40);
         deleteBtn.addActionListener(new ActionListener() {
@@ -394,16 +391,32 @@ public class Client_App {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(textID.getText().equals("1")&&Arrays.equals(textPW.getPassword(),"1".toCharArray())){
-                    System.out.println("Login Successfully");
+                    current_id = "1";
+                    System.out.println("Account with no profile");
                     welcomePanel.setVisible(false);
                     profilePanel.setVisible(true);
-//                    homePanel.setVisible(false);
+
+                }
+
+                else if(textID.getText().equals("2")&&Arrays.equals(textPW.getPassword(),"2".toCharArray())){
+                    current_id = "2";
+                    System.out.println("Account with profile");
+                    welcomePanel.setVisible(false);
+                    homePanel.setVisible(true);
+
+                }
+                else if(textID.getText().equals("3")&&Arrays.equals(textPW.getPassword(),"3".toCharArray())){
+                    current_id = "3";
+                    System.out.println("Account with profile");
+                    welcomePanel.setVisible(false);
+                    homePanel.setVisible(true);
+
                 }
                 else if(textID.getText().equals("admin")&&Arrays.equals(textPW.getPassword(),"admin".toCharArray())){
+                    current_id = "admin";
                     System.out.println("administrator");
                     welcomePanel.setVisible(false);
                     tablePanel.setVisible(true);
-//                    homePanel.setVisible(false);
 
                 }
                 else {

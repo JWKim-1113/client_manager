@@ -2,9 +2,11 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 //채팅서버
 public class Server extends JFrame implements ActionListener {
@@ -18,6 +20,11 @@ public class Server extends JFrame implements ActionListener {
     //network 자원
     private ServerSocket server_socket;
     private Socket socket;
+    private int port;
+    private Vector user_vc = new Vector();
+    private Vector room_vc = new Vector();
+    private boolean RoomCh = true;
+    private StringTokenizer st;
 
     private void Server_start(){
 
@@ -33,20 +40,27 @@ public class Server extends JFrame implements ActionListener {
         }
     }
 
-    private void Connection(){
+    private void Connection() {
+
 
         Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
-                try {
-                    textArea.append("사용자 접속 대기중\n");
-                    socket = server_socket.accept(); // 사용자 접속 무한 대기
-                    textArea.append("사용자 접속!!!\n");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                while (true) {
+                    try {
+                        textArea.append("사용자 접속 대기중\n");
+                        socket = server_socket.accept(); // 사용자 접속 무한 대기
+                        textArea.append("사용자 접속!\n");
+
+                        UserInfo user = new UserInfo(socket); //사용자가 접속할때마다 Socket 객체 생성
+                        user.start(); // 객체의 스레드 실행
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }//while
             }
-        });
+            });
     th.start();
     }
 
@@ -104,6 +118,193 @@ public class Server extends JFrame implements ActionListener {
         else if(e.getSource() == stop_btn)
         {
             System.out.println("서버 스탑 버튼 클릭");
+        }
+    }
+
+    class UserInfo extends Thread{
+        private OutputStream os;
+        private InputStream is;
+        private DataOutputStream dos;
+        private DataInputStream dis;
+
+        private Socket user_socket;
+        private String nickName = "";
+
+        UserInfo(Socket socket){ // 생성자 메소드
+            this.user_socket = socket;
+
+            UserNetwork();
+        }
+        private void UserNetwork(){
+            try {
+                is = user_socket.getInputStream();
+                dis = new DataInputStream(is);
+
+                os = user_socket.getOutputStream();
+                dos = new DataOutputStream(os);
+
+                nickName = dis.readUTF();
+                textArea.append(nickName+" : 사용자 접속!\n");
+
+                //기존 사용자들에게 새로운 사용자 알림
+                System.out.println("현재 접속된 사용자 수 : "+user_vc.size());
+
+                BroadCast("NewUser/"+nickName); // 기존사용자에게 자신을 알림
+
+                //자신에게 기존 사용자를 알림
+                for(int i = 0; i < user_vc.size(); i++){
+                    UserInfo u = (UserInfo)user_vc.elementAt(i);
+                    send_Message("OldUser/"+u.nickName); //나에게 보내는것이므로 send_Message 사용
+                }
+
+                //자신에게 기존 방 목록을 받아옴
+                for(int i=0;i<room_vc.size();i++){
+                    RoomInfo r = (RoomInfo)room_vc.elementAt(i);
+                    send_Message("OldRoom/"+r.Room_name);
+                }
+
+                send_Message("room_list_update/ ");
+
+                user_vc.add(this); // 사용자에게 알린 후 Vector에 자신을 추가한다.
+                BroadCast("user_list_update/ ");
+
+            }catch(IOException e){
+
+            }
+
+        } // run 메소드 끝
+
+
+
+
+        //서버쪽에서 사용자에게 전송할수있는 메소드
+        private void send_Message(String str) {
+            try {
+                dos.writeUTF(str);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        public void run(){ //쓰레드에서 실행할 내용
+            while(true){
+                try {
+                    String msg = dis.readUTF(); //메세지 수신
+                    textArea.append(nickName+" : 사용자로부터 들어온 메세지 :"+msg+"\n");
+                    InMessage(msg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        } //run
+
+        private void InMessage(String str){ // 클라이언트로부터 들어오는 메세지 처리
+            st = new StringTokenizer(str,"/");
+            String protocol = st.nextToken();
+            String message = st.nextToken();
+
+            System.out.println("프로토콜 : "+protocol);
+            System.out.println("메세지 : "+message);
+
+            if(protocol.equals("Note")){
+
+                //protocol = Note
+                //message = user
+
+                String note = st.nextToken();
+
+                System.out.println("수신자 : "+message);
+                System.out.println("메세지 : "+note);
+
+                //벡터에서 해당 사용자를 찾아서 메세지 전송
+                for(int i=0; i<user_vc.size();i++){
+                    UserInfo u = (UserInfo)user_vc.elementAt(i);
+                    //만약 닉네임이 사용자가 찾는 수신자와 같으면
+                    if(u.nickName.equals(message)){
+                        u.send_Message("Note/"+nickName+"/"+note);
+                        // ex) Note/User1@~~~
+                    }
+                }
+            }
+            else if(protocol.equals("CreateRoom")){
+                //1. 현재 같은 방이 존재 하는지 확인한다.
+                for(int i=0;i<room_vc.size();i++){
+                    RoomInfo r = (RoomInfo)room_vc.elementAt(i);
+
+                    if(r.Room_name.equals(message)) { //만들고자 하는 방이 이미 존재할때
+                        send_Message("CreateRoomFail/ok");
+                        RoomCh=false;
+                        break;
+                    }
+
+                } //for
+
+                if(RoomCh) { //방을 만들수 있을때
+                    RoomInfo new_room = new RoomInfo(message,this);
+                    room_vc.add(new_room); // 전체 방 벡터에 방을 추가
+                    send_Message("CreateRoom/"+message);
+
+                    BroadCast("New_Room/"+message);
+                }
+                RoomCh=true;
+            }//else if
+
+            else if(protocol.equals("Chatting")){
+                String msg = st.nextToken();
+
+                for(int i=0;i<room_vc.size();i++){
+                    RoomInfo r = (RoomInfo)room_vc.elementAt(i);
+
+                    if(r.Room_name.equals(message)){ //해당 방을 찾았을 때
+                        r.BroadCast_Room("Chatting/"+nickName+"/"+msg);
+                    }
+                }
+            }
+            else if(protocol.equals("JoinRoom")){
+                for(int i=0;i<room_vc.size();i++){
+                    RoomInfo r = (RoomInfo)room_vc.elementAt(i);
+                    if(r.Room_name.equals(message)){
+                        //새로운 사용자를 알린다
+                        r.BroadCast_Room("Chatting/알림/******  "+nickName+"님이 입장하셨습니다  ******");
+                        //사용자 추가
+                        r.Add_User(this);
+                        send_Message("JoinRoom/"+message);
+                    }
+                }
+            }
+
+        }
+
+        private void BroadCast(String str){
+            //벡터에 사용자들이 객체로 들어있으면 벡터에서 오브젝트형태를 하나 꺼내서 UserInfo 형태로 형변환시키고
+            //그렇게되면 u라는 객체를 통해서 send_Message 메소드 호출가능함
+            for(int i=0; i<user_vc.size();i++){
+                // i 번째에 있는것을 꺼내와서 메세지를 전송
+                UserInfo u = (UserInfo)user_vc.elementAt(i);
+                u.send_Message(str); // 프로토콜부분 -> NewUser/
+            }
+        }
+    } //UserInfo class
+
+    class RoomInfo
+    {
+        private String Room_name;
+        private Vector Room_user_vc = new Vector();
+
+        RoomInfo(String str, UserInfo u){
+            this.Room_name = str;
+            this.Room_user_vc.add(u);
+        }
+
+        public void BroadCast_Room(String str){ //현재 방의 모든 사람에게 알린다
+            for(int i=0; i<Room_user_vc.size();i++){
+                UserInfo u = (UserInfo)Room_user_vc.elementAt(i);
+
+                u.send_Message(str);
+            }
+        }
+        private void Add_User(UserInfo u){
+            this.Room_user_vc.add(u);
         }
     }
 }

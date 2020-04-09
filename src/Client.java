@@ -80,9 +80,9 @@ public class Client extends JFrame implements ActionListener, KeyListener {
         JLabel lblNewLabel = new JLabel("전체접속자");
         lblNewLabel.setBounds(12,10,86,15);
         contentPane.add(lblNewLabel);
-
-        User_list.setBounds(12,32,109,117);
-        contentPane.add(User_list);
+        JScrollPane scrollList = new JScrollPane(User_list,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollList.setBounds(12,32,109,117);
+        contentPane.add(scrollList);
         User_list.setListData(user_list);
 
         access_btn.setBounds(417,3,63,23);
@@ -95,9 +95,9 @@ public class Client extends JFrame implements ActionListener, KeyListener {
         lblNewLabel_1.setBounds(12,192,97,15);
         contentPane.add(lblNewLabel_1);
 
-
-        Room_list.setBounds(12,213,109,135);
-        contentPane.add(Room_list);
+        scrollList = new JScrollPane(Room_list,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollList.setBounds(12,213,109,135);
+        contentPane.add(scrollList);
         Room_list.setListData(room_list);
 
         joinroom_btn.setBounds(12,358,109,23);
@@ -107,9 +107,9 @@ public class Client extends JFrame implements ActionListener, KeyListener {
         createroom_btn.setBounds(12,386,109,23);
         contentPane.add(createroom_btn);
 
-
-        Chat_area.setBounds(133,29,344,347);
-        contentPane.add(Chat_area);
+        JScrollPane scrollPane = new JScrollPane(Chat_area,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBounds(133,29,344,347);
+        contentPane.add(scrollPane);
         Chat_area.setEditable(false);
 
         message_tf = new JTextField();
@@ -277,36 +277,47 @@ public class Client extends JFrame implements ActionListener, KeyListener {
         }
         if(e.getSource()==notesend_btn)
         {
-            System.out.println("쪽지 보내기 버튼 클릭");
-            String user = (String)User_list.getSelectedValue();
+            if(isConnect) {
+                System.out.println("쪽지 보내기 버튼 클릭");
+                String user = (String) User_list.getSelectedValue();
 
-            String note = JOptionPane.showInputDialog("보낼 메세지");
-            if(note!=null){
-                send_message("Note/"+user+"/"+note);
-                //ex = Note/User2@나는 User1이야
+                String note = JOptionPane.showInputDialog("보낼 메세지");
+                if (note != null) {
+                    send_message("Note/" + user + "/" + note);
+                    //ex = Note/User2@나는 User1이야
+                }
+                System.out.println("받는 사람 : " + user + "| 보낼 내용 : " + note);
             }
-            System.out.println("받는 사람 : "+user+"| 보낼 내용 : "+note);
+            else JOptionPane.showMessageDialog(null,"서버 미접속 상태입니다.","알림",JOptionPane.ERROR_MESSAGE);
         }
         else if(e.getSource()==joinroom_btn)
         {
-            String JoinRoom = (String)Room_list.getSelectedValue();
-            send_message("JoinRoom/"+JoinRoom);
+            if(isConnect) {
+                String JoinRoom = (String) Room_list.getSelectedValue();
+                send_message("JoinRoom/" + JoinRoom);
+            }
+            else JOptionPane.showMessageDialog(null,"서버 미접속 상태입니다.","알림",JOptionPane.ERROR_MESSAGE);
             System.out.println("방 참여 버튼 클릭");
         }
         else if(e.getSource()==createroom_btn)
         {
-            String roomname = JOptionPane.showInputDialog("방 이름");
-            if(roomname != null){
-                send_message("CreateRoom/"+roomname);
+            if(isConnect) {
+                String roomname = JOptionPane.showInputDialog("방 이름");
+                if (roomname != null) {
+                    send_message("CreateRoom/" + roomname);
+                }
             }
+            else JOptionPane.showMessageDialog(null,"서버 미접속 상태입니다.","알림",JOptionPane.ERROR_MESSAGE);
             System.out.println("방 만들기 버튼 클릭");
 
         }
         else if(e.getSource()==send_btn)
         {
-            send_message("Chatting/"+My_Room+"/"+message_tf.getText().trim());
-            message_tf.setText("");
-            message_tf.requestFocus();
+            if(!message_tf.getText().equals("")) {
+                send_message("Chatting/" + My_Room + "/" + message_tf.getText().trim());
+                message_tf.setText("");
+                message_tf.requestFocus();
+            }
             //프로토콜 -> Chatting + 방이름 + 내용
             System.out.println("채팅 전송 버튼 클릭");
         }
@@ -325,9 +336,11 @@ public class Client extends JFrame implements ActionListener, KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode()==10){
-            send_message("Chatting/"+My_Room+"/"+message_tf.getText().trim());
-            message_tf.setText("");
-            message_tf.requestFocus();
+            if(!message_tf.getText().equals("")) {
+                send_message("Chatting/" + My_Room + "/" + message_tf.getText().trim());
+                message_tf.setText("");
+                message_tf.requestFocus();
+            }
         }
     }
 }

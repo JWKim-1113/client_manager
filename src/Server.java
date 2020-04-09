@@ -81,7 +81,9 @@ public class Server extends JFrame implements ActionListener {
             @Override
             public void windowClosing(WindowEvent e) {
                 try {
-                    if(server_socket!=null)server_socket.close();
+                    if(server_socket!=null){
+                        server_socket.close();
+                    }
                     user_vc.removeAllElements();
                     room_vc.removeAllElements();
                 }catch(IOException e1){}

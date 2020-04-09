@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -29,10 +31,11 @@ public class Server extends JFrame implements ActionListener {
     private void Server_start(){
 
         try {
-            server_socket = new ServerSocket(12345); // 12345포트 사용
+            server_socket = new ServerSocket(80); // 27048포트 사용
 
         } catch (IOException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "이미 사용중인 포트","알림",JOptionPane.ERROR_MESSAGE);
         }
 
         if(server_socket!=null){
@@ -56,7 +59,7 @@ public class Server extends JFrame implements ActionListener {
                         user.start(); // 객체의 스레드 실행
 
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        break;
                     }
                 }//while
             }
@@ -74,7 +77,18 @@ public class Server extends JFrame implements ActionListener {
     }
 
     private void init(){
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    if(server_socket!=null)server_socket.close();
+                    user_vc.removeAllElements();
+                    room_vc.removeAllElements();
+                }catch(IOException e1){}
+                dispose();
+            }
+        });
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100,100,319,370);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5,5,5,5));
@@ -87,6 +101,7 @@ public class Server extends JFrame implements ActionListener {
 
 
         scrollPane.setViewportView(textArea);
+        textArea.setEditable(false);
 
         JLabel lblNewLabel = new JLabel("포트 번호");
         lblNewLabel.setBounds(12,238,57,15);
@@ -104,7 +119,7 @@ public class Server extends JFrame implements ActionListener {
 
         stop_btn.setBounds(151,280,140,23);
         contentPane.add(stop_btn);
-
+        stop_btn.setEnabled(false);
         this.setVisible(true);
     }
 
@@ -114,9 +129,21 @@ public class Server extends JFrame implements ActionListener {
         {
             System.out.println("스타트 버튼 클릭");
             Server_start(); //소켓 생성 및 사용자 대기
+            start_btn.setEnabled(false);
+            port_tf.setEditable(false);
+            stop_btn.setEnabled(true);
         }
-        else if(e.getSource() == stop_btn)
-        {
+        else if(e.getSource() == stop_btn) {
+
+            stop_btn.setEnabled(false);
+            start_btn.setEnabled(true);
+            port_tf.setEditable(true);
+
+            try {
+                server_socket.close();
+                user_vc.removeAllElements();
+                room_vc.removeAllElements();
+            }catch(IOException e1){}
             System.out.println("서버 스탑 버튼 클릭");
         }
     }
@@ -169,7 +196,7 @@ public class Server extends JFrame implements ActionListener {
                 BroadCast("user_list_update/ ");
 
             }catch(IOException e){
-
+                JOptionPane.showMessageDialog(null, "stream 설정 에러 발생","알림",JOptionPane.ERROR_MESSAGE);
             }
 
         } // run 메소드 끝
@@ -192,7 +219,16 @@ public class Server extends JFrame implements ActionListener {
                     textArea.append(nickName+" : 사용자로부터 들어온 메세지 :"+msg+"\n");
                     InMessage(msg);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    textArea.append(nickName+" : 사용자 접속 끊어짐\n");
+                    try {
+                        dos.close();
+                        dis.close();
+                        user_socket.close();
+                        user_vc.remove(this);
+                        BroadCast("User_out/" + nickName);
+                        BroadCast("user_list_update/ ");
+                    }catch(IOException e1){}
+                    break;
                 }
 
             }

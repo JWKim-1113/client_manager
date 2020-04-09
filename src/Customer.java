@@ -181,9 +181,11 @@ public class Customer {
     public static Connection getConnection(){
         try{
             String driver = "com.mysql.cj.jdbc.Driver";
-            String url = "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12330667";
-            String user = "sql12330667";
-            String pass = "6yDQHN1rWi";
+//            String url = "jdbc:mysql://sql12.freemysqlhosting.net:3306/sql12332275";
+//            String user = "sql12332275";
+            String url = "jdbc:mysql://localhost:3306/client_app?serverTimezone=UTC";
+            String user = "root";
+            String pass = "1234qwer";
             Class.forName(driver);
             Connection con = DriverManager.getConnection(url,user,pass);
             System.out.println("The Connection Successful");

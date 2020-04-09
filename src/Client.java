@@ -1,7 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
@@ -9,7 +8,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 
 //채팅클라이언트
-public class Client extends JFrame implements ActionListener {
+public class Client extends JFrame implements ActionListener, KeyListener {
 
     private JPanel contentPane;
 
@@ -30,8 +29,8 @@ public class Client extends JFrame implements ActionListener {
 
     //네트워크를 위한 자원변수
     private Socket socket;
-    private String ip = ""; //"127.0.0.1" 는 자기자신
-    private int port = 12345;
+    private String ip = "127.0.0.1"; //"127.0.0.1" 는 자기자신
+    private int port = 80;
 //    private String id = "";
     private InputStream is;
     private OutputStream os;
@@ -42,7 +41,7 @@ public class Client extends JFrame implements ActionListener {
     Vector user_list = new Vector();
     Vector room_list = new Vector();
     StringTokenizer st;
-
+    Boolean isConnect = false;
     private String My_Room; //내가 현재 있는 방 이름
 
     Client()
@@ -57,9 +56,21 @@ public class Client extends JFrame implements ActionListener {
         joinroom_btn.addActionListener(this);
         createroom_btn.addActionListener(this);
         send_btn.addActionListener(this);
+        message_tf.addKeyListener(this);
     }
     private void Main_init(){
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    if (socket != null) socket.close();
+                }catch (IOException e1){}
+                isConnect = false;
+                dispose();
+
+            }
+        });
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100,100,516,450);
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5,5,5,5));
@@ -99,14 +110,17 @@ public class Client extends JFrame implements ActionListener {
 
         Chat_area.setBounds(133,29,344,347);
         contentPane.add(Chat_area);
+        Chat_area.setEditable(false);
 
         message_tf = new JTextField();
         message_tf.setBounds(133,387,279,21);
         contentPane.add(message_tf);
         message_tf.setColumns(10);
+        message_tf.setEnabled(false);
 
         send_btn.setBounds(414,386,63,23);
         contentPane.add(send_btn);
+        send_btn.setEnabled(false);
 
         this.setVisible(true);
     }
@@ -118,11 +132,14 @@ public class Client extends JFrame implements ActionListener {
             if(socket != null) // 정상적으로 소켓이 연결되었을경우
             {
                 Connection();
+
             }
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "연결 실패","알림",JOptionPane.ERROR_MESSAGE);
+
         } catch (IOException e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "연결 실패","알림",JOptionPane.ERROR_MESSAGE);
+
         }
     }
     private void Connection() {
@@ -132,8 +149,10 @@ public class Client extends JFrame implements ActionListener {
 
             os = socket.getOutputStream();
             dos = new DataOutputStream(os);
+            isConnect=true;
+            access_btn.setEnabled(false);
         }catch(IOException e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "연결 실패","알림",JOptionPane.ERROR_MESSAGE);
         } // Stream 설정 끝
 
         //처음 접속시에 ID 전송
@@ -152,6 +171,15 @@ public class Client extends JFrame implements ActionListener {
 
                         inMessage(msg);
                     } catch (IOException e) {
+                        try {
+                            os.close();
+                            is.close();
+                            dos.close();
+                            dis.close();
+                            socket.close();
+                            JOptionPane.showMessageDialog(null, "서버와 접속 끊어짐","알림",JOptionPane.ERROR_MESSAGE);
+                        }catch (IOException e1){}
+                        break;
 
                     }
                 }
@@ -191,6 +219,10 @@ public class Client extends JFrame implements ActionListener {
         else if(protocol.equals("CreateRoom")) //방 만들었을때
         {
             My_Room = message;
+            message_tf.setEnabled(true);
+            send_btn.setEnabled(true);
+            joinroom_btn.setEnabled(false);
+            createroom_btn.setEnabled(false);
         }
         else if(protocol.equals("CreateRoomFail")) //방만들기 실패했을때
         {
@@ -214,7 +246,15 @@ public class Client extends JFrame implements ActionListener {
         }
         else if(protocol.equals("JoinRoom")){
             My_Room = message;
+            message_tf.setEnabled(true);
+            send_btn.setEnabled(true);
+            joinroom_btn.setEnabled(false);
+            createroom_btn.setEnabled(false);
             JOptionPane.showMessageDialog(null, "채팅방에 입장했습니다.","알림",JOptionPane.INFORMATION_MESSAGE);
+        }
+        else if(protocol.equals("User_out")){
+            user_list.remove(message);
+
         }
     }
     private void send_message(String str){ //서버에게 메세지를 보내는 부분
@@ -228,8 +268,12 @@ public class Client extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()==access_btn)
         {
-            System.out.println("접속 버튼 클릭");
-            Network();
+            if(!isConnect) {
+                System.out.println("접속 버튼 클릭");
+                Network();
+
+            }
+            else JOptionPane.showMessageDialog(null,"이미 접속 되어있습니다","알림",JOptionPane.ERROR_MESSAGE);
         }
         if(e.getSource()==notesend_btn)
         {
@@ -261,8 +305,29 @@ public class Client extends JFrame implements ActionListener {
         else if(e.getSource()==send_btn)
         {
             send_message("Chatting/"+My_Room+"/"+message_tf.getText().trim());
+            message_tf.setText("");
+            message_tf.requestFocus();
             //프로토콜 -> Chatting + 방이름 + 내용
             System.out.println("채팅 전송 버튼 클릭");
+        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if(e.getKeyCode()==10){
+            send_message("Chatting/"+My_Room+"/"+message_tf.getText().trim());
+            message_tf.setText("");
+            message_tf.requestFocus();
         }
     }
 }

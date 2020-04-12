@@ -17,6 +17,9 @@ public class Client_App {
     private JPanel tablePanel;
     private JPanel homePanel;
     static String current_id = "";
+    private int loginResult=2;
+    private String firstCheck ="1";
+    private JTextField textID = new JTextField(10);
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -37,10 +40,11 @@ public class Client_App {
     private void initialize(){
         //DB와 GUI 연결하기위한 Customer 객체생성
         Customer customer = new Customer();
-
+//        customer.deleteTable();
+//        customer.createTable();
         frame = new JFrame();
         frame.setBounds(100, 100, 1077, 706);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		ImagePanel welcomePanel = new ImagePanel(new ImageIcon("./img/background.jpg").getImage());
@@ -72,7 +76,9 @@ public class Client_App {
         textName.setBounds(200,150,140,40);
         profilePanel.add(name);
         profilePanel.add(textName);
-
+//=================================================================================================
+        
+//=================================================================================================        
         JLabel phone = new JLabel("Phone");
         phone.setFont(new Font("Lato",Font.BOLD,20));
         phone.setBounds(100,250,85,40);
@@ -158,7 +164,7 @@ public class Client_App {
         tablePanel = new JPanel();
         tablePanel.setBounds(0,0,welcomePanel.getWidth(),welcomePanel.getHeight());
         String[][] data = customer.getCustomers();
-        String[] headers = new String[]{"ID","Name","Phone","Gender","Age","Note"};
+        String[] headers = new String[]{"ID","UserName","Password","Name","Phone","Gender","Age","Note"};
         JTable table = new JTable(data,headers);
 //        table.setModel(new DefaultTableModel(data,headers));
         table.setBounds(0,300,800,400);
@@ -170,6 +176,99 @@ public class Client_App {
         table.setPreferredScrollableViewportSize(new Dimension(800,400));
         //JScrollPane < 스크롤이가능한 컴포넌트로 추가한다.
         tablePanel.add(new JScrollPane(table));
+        // ************************************* create 패널 ******************************************
+        JButton createBtn = new JButton("Create");
+        createBtn.setBounds(500,600,150,40);
+        createBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JPanel createPanel = new JPanel();
+                createPanel.setBounds(0,0,welcomePanel.getWidth(),welcomePanel.getHeight());
+                createPanel.setBackground(Color.WHITE);
+                createPanel.setLayout(null);
+
+
+                JLabel createMain = new JLabel("Welcome createPanel");
+                createMain.setBounds(360,50,300,40);
+                createMain.setFont(new Font("Lato",Font.BOLD,20));
+                createPanel.add(createMain);	
+                //관리자가 처음 만들어줄 username
+                JLabel username = new JLabel("userName");
+                username.setFont(new Font("Lato",Font.BOLD,20));
+                username.setBounds(100,150,110,40);
+
+                JTextField textUserName = new JTextField(10);
+                textUserName.setBounds(220,150,140,40);
+                createPanel.add(username);
+                createPanel.add(textUserName);
+                //관리자가 처음 만들어줄 password
+                JLabel password = new JLabel("password");
+                password.setFont(new Font("Late",Font.BOLD,20));
+                password.setBounds(100,250,110,40);
+                
+                JPasswordField textPassword = new JPasswordField(10);
+                textPassword.setBounds(220,250,140,40);
+                createPanel.add(password);
+                createPanel.add(textPassword);
+                
+                //username 과 password 저장 버튼 생성 
+                JButton saveBtn =new JButton("SAVE");
+                saveBtn.setBounds(350,400,150,40);
+                saveBtn.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						String Username = textUserName.getText();
+						String password="";
+//						String name="";
+//						String phone="";
+//						String gender="";
+//						String age="";
+//						String note="";
+						char[] secret_pw = textPassword.getPassword();
+						for (char cha : secret_pw) {
+								Character.toString(cha);  //cha에 저장된 값 String으로 변환
+								
+								//pw 에 저장하기, pw 에 값이 비어있으면 저장, 값이 있으면 이어서 저장하는 삼항연산자
+								password += (password.equals("")) ? ""+cha+"" : ""+cha+"";			
+						}
+						Boolean flag = customer.createCustomer(Username,password);
+//						Boolean flag = customer.createCustomer(Username,password,name, phone, gender, age, note);
+						if(flag==true){
+							
+							//실행시 바로 테이블이 실시간으로 보이게끔
+							table.setModel(new DefaultTableModel(customer.getCustomers(),headers));
+
+			                TableColumnModel columnModels = table.getColumnModel();
+			                columnModels.getColumn(0).setPreferredWidth(10);
+			                columnModels.getColumn(1).setPreferredWidth(100);
+			                columnModels.getColumn(3).setPreferredWidth(50);
+			                columnModels.getColumn(4).setPreferredWidth(10);
+
+			                tablePanel.repaint();
+			                frame.repaint();
+			                frame.validate();
+			                
+		                    createPanel.setVisible(false);
+		                    tablePanel.setVisible(true);
+		                }
+		                else{
+		                }
+		            }
+					
+				});
+                
+                createPanel.add(saveBtn);
+                
+                tablePanel.setVisible(false);
+                createPanel.setVisible(true);
+                
+                frame.getContentPane().add(createPanel);
+			}
+		});
+        
+        
         // ************************************* update 패널 ******************************************
         JButton updateBtn = new JButton("Update");
         updateBtn.setBounds(500,700,150,40);
@@ -179,11 +278,12 @@ public class Client_App {
             public void actionPerformed(ActionEvent e) {
                 int row1=table.getSelectedRow();
                 Object id= table.getValueAt(row1, 0);
-                Object Name =table.getValueAt(row1, 1);
-                Object Phone =table.getValueAt(row1, 2);
-                Object Gender =table.getValueAt(row1, 3);
-                Object Age =table.getValueAt(row1, 4);
-                Object Note =table.getValueAt(row1, 5);
+                Object userName= table.getValueAt(row1, 1);
+                Object Name =table.getValueAt(row1, 3);
+                Object Phone =table.getValueAt(row1, 4);
+                Object Gender =table.getValueAt(row1, 5);
+                Object Age =table.getValueAt(row1, 6);
+                Object Note =table.getValueAt(row1, 7);
 
                 JPanel updatePanel = new JPanel();
                 updatePanel.setBounds(0,0,welcomePanel.getWidth(),welcomePanel.getHeight());
@@ -257,7 +357,7 @@ public class Client_App {
                         String phoneText = textPhone.getText();
                         String genderText = comboBoxGender.getSelectedItem().toString();
                         String noteText = textNote.getText();
-                        Boolean flag = customer.updateCustomer(id,nameText,phoneText,genderText,ageText,noteText);
+                        Boolean flag = customer.updateCustomer(userName,nameText,phoneText,genderText,ageText,noteText,firstCheck);
                         if(flag==true){
                             table.setModel(new DefaultTableModel(customer.getCustomers(),headers));
 
@@ -298,8 +398,9 @@ public class Client_App {
             public void actionPerformed(ActionEvent e) {
                 int row1= table.getSelectedRow();
                 Object deleteId=table.getValueAt(row1,0);
-                Object deletePhone=table.getValueAt(row1,2);
-                customer.deleteCustomer(deleteId,deletePhone);
+                Object deleteUsername=table.getValueAt(row1,1);
+                customer.deleteCustomer(deleteId,deleteUsername);
+                
                 table.setModel(new DefaultTableModel(customer.getCustomers(),headers));
 
                 TableColumnModel columnModels = table.getColumnModel();
@@ -313,6 +414,7 @@ public class Client_App {
                 frame.validate();
             }
         });
+        tablePanel.add(createBtn);
         tablePanel.add(updateBtn);
         tablePanel.add(deleteBtn);
         frame.getContentPane().add(tablePanel);
@@ -339,7 +441,44 @@ public class Client_App {
         columnModels.getColumn(3).setPreferredWidth(50);
         columnModels.getColumn(4).setPreferredWidth(10);
         tablePanel.setVisible(false);
+//        ===============================================================================================================
+        
+        //submit(제출 ) 버튼 생성 및 action 
+        JButton submitBtn = new JButton("Submit");
+        submitBtn.setBounds(500,400,150,40);
+        submitBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				String nameText = textName.getText();
+                String ageText = textAge.getText();
+                String phoneText = textPhone.getText();
+                String genderText = comboBoxGender.getSelectedItem().toString();
+                String noteText = textNote.getText();
+                String userName = textID.getText();
+                Boolean flag = customer.updateCustomer(userName, nameText, phoneText,genderText,ageText,  noteText,firstCheck);
+				if(flag==true) {
+					profilePanel.setVisible(false);
+					homePanel.setVisible(true);
+					 table.setModel(new DefaultTableModel(customer.getCustomers(),headers));
 
+		                TableColumnModel columnModels = table.getColumnModel();
+		                columnModels.getColumn(0).setPreferredWidth(10);
+		                columnModels.getColumn(1).setPreferredWidth(100);
+		                columnModels.getColumn(3).setPreferredWidth(50);
+		                columnModels.getColumn(4).setPreferredWidth(10);
+
+		                tablePanel.repaint();
+		                frame.repaint();
+		                frame.validate();
+				}else {
+					
+				}
+			}
+		});
+        profilePanel.add(submitBtn);
+/*
         // submit(제출)버튼 생성 및 action
         JButton submitBtn = new JButton("Submit");
         submitBtn.setBounds(500,400,150,40);
@@ -360,8 +499,9 @@ public class Client_App {
                 }
             }
         });
+        
         profilePanel.add(submitBtn);
-
+*/
         frame.getContentPane().add(profilePanel);
 
 
@@ -377,8 +517,9 @@ public class Client_App {
         pwLb.setBounds(322,455,85,40);
         pwLb.setFont(new Font("Lato",Font.BOLD,20));
         //로그인화면 ID textField
-        JTextField textID = new JTextField(10);
+       
         textID.setBounds(400,418,160,25);
+        
         //로그인화면 PW textField
         JPasswordField textPW = new JPasswordField(10);
         textPW.setBounds(400,463,160,25);
@@ -388,6 +529,47 @@ public class Client_App {
         logBtn.setPressedIcon(new ImageIcon("./img/loginbtn_click.png"));
         logBtn.setBounds(380,523,170,50);
         logBtn.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        	
+        		//관리자로 접근
+        		if(textID.getText().equals("admin")&&Arrays.equals(textPW.getPassword(),"admin".toCharArray())){
+                    current_id = "admin";
+                    System.out.println("administrator");
+                    welcomePanel.setVisible(false);
+                    tablePanel.setVisible(true);
+
+                }
+                
+        		//유저 ID PW로 로그인 방법
+        		String userName = textID.getText();
+        		String password="";
+        	
+        		char [] pwd = textPW.getPassword();
+        		for (char cha : pwd) {
+					Character.toString(cha);  //cha에 저장된 값 String으로 변환
+					
+					//pw 에 저장하기, pw 에 값이 비어있으면 저장, 값이 있으면 이어서 저장하는 삼항연산자
+					password += (password.equals("")) ? ""+cha+"" : ""+cha+"";			
+        			}
+        			loginResult= customer.LoginCustomer(userName, password,loginResult);
+        		if(loginResult ==0) { //로그인 성공 
+        			welcomePanel.setVisible(false);
+        			profilePanel.setVisible(true);
+        		}else if(loginResult ==1) {
+        			welcomePanel.setVisible(false);
+        			homePanel.setVisible(true);
+        		}else if(textID.getText().equals("admin")&&Arrays.equals(textPW.getPassword(),"admin".toCharArray())){
+                    current_id = "admin";
+                    System.out.println("administrator");
+                    welcomePanel.setVisible(false);
+                    tablePanel.setVisible(true);
+
+                }else{  //로그인 실패 
+        			JOptionPane.showMessageDialog(null, "로그인 실패");
+        		}
+        	}
+        	/*
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(textID.getText().equals("1")&&Arrays.equals(textPW.getPassword(),"1".toCharArray())){
@@ -422,7 +604,7 @@ public class Client_App {
                 else {
                     JOptionPane.showMessageDialog(null,"login fail");
                 }
-            }
+            }*/
         });
         welcomePanel.add(idLb);
         welcomePanel.add(textID);
@@ -480,6 +662,8 @@ public class Client_App {
 				homePanel.setVisible(false);
 				tablePanel.setVisible(false);
 				panel.setVisible(true);
+				
+				
 			}
 		});
 

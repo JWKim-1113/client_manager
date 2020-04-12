@@ -40,8 +40,8 @@ public class Client_App {
     private void initialize(){
         //DB와 GUI 연결하기위한 Customer 객체생성
         Customer customer = new Customer();
-//        customer.deleteTable();
-//        customer.createTable();
+        customer.deleteTable();
+        customer.createTable();
         frame = new JFrame();
         frame.setBounds(100, 100, 1077, 706);
 //		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

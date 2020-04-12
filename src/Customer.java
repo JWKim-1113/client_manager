@@ -100,25 +100,42 @@ public class Customer {
     public static Boolean createCustomer(String Username,String password  ){
         try{
             Connection con = getConnection();
+            PreparedStatement select = con.prepareStatement(""
+            		+ " SELECT COUNT(username)"
+            		+ " FROM customer "
+            		+ " WHERE"
+            		+ " username = '"+Username+"'"
+            		);
+            
             PreparedStatement insert = con.prepareStatement(""
                     + "INSERT INTO customer"
             		+ "(username,password)"
 //                    + "(username,password,name, phone, gender, age, note)"
                     + "VALUE "
                     + "('"+Username+"','"+password+"')"
-                    + "WHERE NOT EXISTS "
-                    + "(SELECT * FROM customer WHERE username = 'Username')"
 //                    + "('"+username+"','"+password+"','"+name+"','"+phone+"','"+gender+"','"+age+"','"+note+"')"
             );
+            ResultSet rs =select.executeQuery();
+            if(rs.next()) {
+            	int num =rs.getInt(1);
+            	if(num==0) {
             insert.executeUpdate();
             System.out.println("The data has been saved!");
             JOptionPane.showMessageDialog(null,"Your data has been saved successfully");
             return true;
+            }else {
+            	JOptionPane.showMessageDialog(null, "중복입니다.","알림",JOptionPane.ERROR_MESSAGE);
+            	
+            	return false;
+            	}
+            }
+            
         }catch(Exception e){
             System.out.println(e.getMessage());
             JOptionPane.showMessageDialog(null,e.getMessage());
             return false;
         }
+        return false;
     }
 
     //테이블생성 QUERRY

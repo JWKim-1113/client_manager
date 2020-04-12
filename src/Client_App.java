@@ -37,7 +37,8 @@ public class Client_App {
     private void initialize(){
         //DB와 GUI 연결하기위한 Customer 객체생성
         Customer customer = new Customer();
-
+       //custome customer.createTable();
+        
         frame = new JFrame();
         frame.setBounds(100, 100, 1077, 706);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -60,58 +61,58 @@ public class Client_App {
         profilePanel.setVisible(false);
 
         //메인패널 상단 label
-        JLabel welcomeMain = new JLabel("Welcome main panel");
-        welcomeMain.setBounds(360,50,300,40);
-        welcomeMain.setFont(new Font("Lato",Font.BOLD,20));
+        JLabel welcomeMain = new JLabel("JOB TIME");
+        welcomeMain.setBounds(360,25,300,25);
+        welcomeMain.setFont(new Font("맑은 고딕",Font.BOLD ,20 ));
         profilePanel.add(welcomeMain);
 
         JLabel name = new JLabel("Name");
-        name.setFont(new Font("Lato",Font.BOLD,20));
-        name.setBounds(100,150,85,40);
+        name.setFont(new Font("맑은 고딕",Font.BOLD,20));
+        name.setBounds(250,120,85,40);
         JTextField textName = new JTextField(10);
-        textName.setBounds(200,150,140,40);
+        textName.setBounds(320,120,140,40);
         profilePanel.add(name);
         profilePanel.add(textName);
 
         JLabel phone = new JLabel("Phone");
-        phone.setFont(new Font("Lato",Font.BOLD,20));
-        phone.setBounds(100,250,85,40);
+        phone.setFont(new Font("맑은 고딕",Font.BOLD,20));
+        phone.setBounds(250,180,85,40);
         JTextField textPhone = new JTextField(10);
-        textPhone.setBounds(200,250,140,40);
+        textPhone.setBounds(320,180,140,40);
         profilePanel.add(phone);
         profilePanel.add(textPhone);
 
         JLabel age = new JLabel("Age");
-        age.setFont(new Font("Lato",Font.BOLD,20));
-        age.setBounds(100,350,85,40);
+        age.setFont(new Font("맑은 고딕",Font.BOLD,20));
+        age.setBounds(265,240,85,40);
         JTextField textAge = new JTextField(2);
-        textAge.setBounds(200,350,140,40);
+        textAge.setBounds(320,240,140,40);
         profilePanel.add(age);
         profilePanel.add(textAge);
 
         JLabel birthDay = new JLabel("Birthday");
-        birthDay.setFont(new Font("Lato",Font.BOLD,20));
-        birthDay.setBounds(100,450,85,40);
+        birthDay.setFont(new Font("맑은 고딕",Font.BOLD,20));
+        birthDay.setBounds(235,300,85,40);
         JTextField textBirthDay = new JTextField(8);
-        textBirthDay.setBounds(200,450,140,40);
+        textBirthDay.setBounds(320,300,140,40);
         profilePanel.add(birthDay);
         profilePanel.add(textBirthDay);
 
         JLabel gender = new JLabel("Gender");
-        gender.setFont(new Font("Lato",Font.BOLD,20));
-        gender.setBounds(100,550,85,40);
+        gender.setFont(new Font("맑은 고딕",Font.BOLD,20));
+        gender.setBounds(235,360,85,40);
         
         JComboBox comboBoxGender = new JComboBox(new String[]{"Male","Female"});
-        comboBoxGender.setBounds(200,550,140,40);
+        comboBoxGender.setBounds(320,360,140,40);
         profilePanel.add(gender);
         profilePanel.add(comboBoxGender);
 
         JLabel note = new JLabel("Note");
-        note.setFont(new Font("Lato",Font.BOLD,20));
-        note.setBounds(400,150,85,40);
+        note.setFont(new Font("맑은 고딕",Font.BOLD,20));
+        note.setBounds(250,420,85,40);
         
         JTextArea textNote = new JTextArea();
-        textNote.setBounds(500,150,160,160);
+        textNote.setBounds(320,420,160,90);
         textNote.setBorder(BorderFactory.createLineBorder(Color.black,1));
         profilePanel.add(note);
         profilePanel.add(textNote);
@@ -192,62 +193,62 @@ public class Client_App {
 
 
                 JLabel updateMain = new JLabel("Welcome updatePanel");
-                updateMain.setBounds(360,50,300,40);
-                updateMain.setFont(new Font("Lato",Font.BOLD,20));
+                updateMain.setBounds(360,25,300,25);
+                updateMain.setFont(new Font("맑은 고딕",Font.BOLD,20));
                 updatePanel.add(updateMain);
 
                 JLabel name = new JLabel("Name");
                 name.setFont(new Font("Lato",Font.BOLD,20));
-                name.setBounds(100,150,85,40);
+                name.setBounds(250,120,85,40);
 
                 JTextField textName = new JTextField(10);
-                textName.setBounds(200,150,140,40);
+                textName.setBounds(320,120,140,40);
                 textName.setText((String) Name);
                 updatePanel.add(name);
                 updatePanel.add(textName);
 
                 JLabel phone = new JLabel("Phone");
                 phone.setFont(new Font("Lato",Font.BOLD,20));
-                phone.setBounds(100,250,85,40);
+                phone.setBounds(250,180,85,40);
 
                 JTextField textPhone = new JTextField(10);
-                textPhone.setBounds(200,250,140,40);
+                textPhone.setBounds(320,180,140,40);
                 textPhone.setText((String)Phone);
                 updatePanel.add(phone);
                 updatePanel.add(textPhone);
 
                 JLabel age = new JLabel("Age");
                 age.setFont(new Font("Lato",Font.BOLD,20));
-                age.setBounds(100,350,85,40);
+                age.setBounds(265,240,85,40);
 
                 JTextField textAge = new JTextField(2);
-                textAge.setBounds(200,350,140,40);
+                textAge.setBounds(320,240,140,40);
                 textAge.setText((String)Age);
                 updatePanel.add(age);
                 updatePanel.add(textAge);
 
                 JLabel gender = new JLabel("Gender");
                 gender.setFont(new Font("Lato",Font.BOLD,20));
-                gender.setBounds(100,550,85,40);
+                gender.setBounds(235,300,85,40);
 
                 JComboBox comboBoxGender = new JComboBox(new String[]{"Male","Female"});
-                comboBoxGender.setBounds(200,550,140,40);
+                comboBoxGender.setBounds(320,300,140,40);
                 updatePanel.add(gender);
                 updatePanel.add(comboBoxGender);
 
                 JLabel note = new JLabel("Note");
                 note.setFont(new Font("Lato",Font.BOLD,20));
-                note.setBounds(400,150,85,40);
+                note.setBounds(250,360,85,40);
 
                 JTextArea textNote = new JTextArea();
-                textNote.setBounds(500,150,160,160);
+                textNote.setBounds(320,360,160,90);
                 textNote.setBorder(BorderFactory.createLineBorder(Color.black,1));
                 textNote.setText((String)Note);
                 updatePanel.add(note);
                 updatePanel.add(textNote);
 
                 JButton updateSubmitBtn =new JButton("UpdateComplete");
-                updateSubmitBtn.setBounds(500,400,150,40);
+                updateSubmitBtn.setBounds(500,520,150,40);
                 updateSubmitBtn.addActionListener(new ActionListener() {
 
                     @Override
@@ -342,7 +343,7 @@ public class Client_App {
 
         // submit(제출)버튼 생성 및 action
         JButton submitBtn = new JButton("Submit");
-        submitBtn.setBounds(500,400,150,40);
+        submitBtn.setBounds(500,520,75,40);
         submitBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

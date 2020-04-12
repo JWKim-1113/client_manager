@@ -243,7 +243,7 @@ public class Customer {
 //            String user = "sql12332275";
             String url = "jdbc:mysql://localhost:3306/client_app?serverTimezone=UTC";
             String user = "root";
-            String pass = "qwer1234";
+            String pass = "1234qwer";
             Class.forName(driver);
             Connection con = DriverManager.getConnection(url,user,pass);
             System.out.println("The Connection Successful");

@@ -9,7 +9,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Arrays;
-
+ //test
+  
 public class Client_App {
     private JFrame frame;
     private JPanel welcomePanel;
@@ -42,12 +43,14 @@ public class Client_App {
         Customer customer = new Customer();
 //        customer.deleteTable();
 //        customer.createTable();
+        
+        
         frame = new JFrame();
-        frame.setBounds(100, 100, 1077, 706);
+        frame.setBounds(100, 100, 1000, 706);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		ImagePanel welcomePanel = new ImagePanel(new ImageIcon("./img/background.jpg").getImage());
+		ImagePanel welcomePanel = new ImagePanel(new ImageIcon("./img/background2.png").getImage());
         
 //		JPanel profilePanel, tablePanel, homePanel;
 
@@ -507,25 +510,26 @@ public class Client_App {
         //************************************* LOGIN 화면 ******************************************
 
         //로그인화면 ID label
-        JLabel idLb = new JLabel("ID :");
-        idLb.setBounds(334,407,85,40);
-        idLb.setFont(new Font("Lato",Font.BOLD,20));
         //로그인화면 PW label
-        JLabel pwLb = new JLabel("PW :");
-        pwLb.setBounds(322,455,85,40);
-        pwLb.setFont(new Font("Lato",Font.BOLD,20));
         //로그인화면 ID textField
        
-        textID.setBounds(400,418,160,25);
+        textID.setFont(new Font("휴먼고딕", Font.PLAIN, 18));
+        textID.setBounds(500,280,300,45);
         
         //로그인화면 PW textField
         JPasswordField textPW = new JPasswordField(10);
-        textPW.setBounds(400,463,160,25);
+        textPW.setFont(new Font("굴림", Font.PLAIN, 18));
+        textPW.setBounds(500,350,300,45);
         //로그인화면 Login Button
-        JButton logBtn =  new JButton("LogIn");
-        logBtn.setIcon(new ImageIcon("./img/loginbtn.png"));
-        logBtn.setPressedIcon(new ImageIcon("./img/loginbtn_click.png"));
-        logBtn.setBounds(380,523,170,50);
+        
+//        JButton logBtn =  new JButton("LogIn");
+//        logBtn.setIcon(new ImageIcon("./img/loginbtn.png"));
+//        logBtn.setPressedIcon(new ImageIcon("./img/loginbtn_click.png"));
+//        logBtn.setBounds(500,420,170,45);
+        
+        RoundedButton logBtn = new RoundedButton("LogIn");
+        logBtn.setBounds(500, 420, 170, 45);
+        
         logBtn.addActionListener(new ActionListener() {
         	@Override
         	public void actionPerformed(ActionEvent e) {
@@ -604,9 +608,8 @@ public class Client_App {
                 }
             }*/
         });
-        welcomePanel.add(idLb);
+
         welcomePanel.add(textID);
-        welcomePanel.add(pwLb);
         welcomePanel.add(textPW);
         welcomePanel.add(logBtn);
    //****************************************************************************************
@@ -618,7 +621,8 @@ public class Client_App {
     }
     
     
-    
+      
+      
     //************************************* 상단 메뉴바 ******************************************
     public JMenuBar menuBar(JPanel panel) {
     	
@@ -687,4 +691,69 @@ class ImagePanel extends JPanel{
     public void paintComponent(Graphics g){
         g.drawImage(img,0,0,null);
     }
+}
+
+// logBtn 버튼 클래스
+
+class RoundedButton extends JButton { 
+	
+	public RoundedButton() { 
+		super(); 
+		decorate(); 
+	} 
+	
+	public RoundedButton(String text) { 
+		super(text); 
+		decorate(); 
+	} 
+	
+	public RoundedButton(Action action) { 
+		super(action); 
+		decorate(); 
+	} 
+	
+	public RoundedButton(Icon icon) { 
+		super(icon); 
+		decorate(); 
+	} 
+	
+	public RoundedButton(String text, Icon icon) { 
+		super(text, icon); 
+		decorate(); 
+	} 
+	protected void decorate() { 
+		setBorderPainted(false); 
+		setOpaque(false); 
+	} 
+	@Override 
+	protected void paintComponent(Graphics g) { 
+		int width = getWidth(); 
+		int height = getHeight(); 
+		Graphics2D graphics = (Graphics2D) g; 
+		graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); 
+		
+		if (getModel().isArmed()) { 
+//			graphics.setColor(getBackground().brighter());
+			graphics.setColor(getBackground().darker());
+			
+		} 
+		else if (getModel().isRollover()) { 
+//			graphics.setColor(getBackground().darker());
+			graphics.setColor(getBackground().brighter());
+		} 
+		else { 
+			graphics.setColor(getBackground());
+		} 
+		
+		graphics.fillRoundRect(0, 0, width, height, 10, 10); 
+		FontMetrics fontMetrics = graphics.getFontMetrics(); 
+		Rectangle stringBounds = fontMetrics.getStringBounds(this.getText(), graphics).getBounds(); 
+		int textX = (width - stringBounds.width) / 2; 
+		int textY = (height - stringBounds.height) / 2 + fontMetrics.getAscent(); 
+		graphics.setColor(getForeground()); 
+		graphics.setFont(getFont()); 
+		graphics.drawString(getText(), textX, textY); 
+		graphics.dispose(); 
+		super.paintComponent(g); 
+	}
 }

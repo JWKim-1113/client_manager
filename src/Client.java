@@ -80,10 +80,11 @@ public class Client extends JFrame implements ActionListener, KeyListener {
         JLabel lblNewLabel = new JLabel("전체접속자");
         lblNewLabel.setBounds(12,10,86,15);
         contentPane.add(lblNewLabel);
+        User_list.setListData(user_list);
         JScrollPane scrollList = new JScrollPane(User_list,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         scrollList.setBounds(12,32,109,117);
         contentPane.add(scrollList);
-        User_list.setListData(user_list);
+
 
         access_btn.setBounds(417,3,63,23);
         contentPane.add(access_btn);

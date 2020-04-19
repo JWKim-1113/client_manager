@@ -533,20 +533,20 @@ public class Client_App {
         logBtn.addActionListener(new ActionListener() {
         	@Override
         	public void actionPerformed(ActionEvent e) {
-        	
-        		//관리자로 접근
+
+        /*		//관리자로 접근
         		if(textID.getText().equals("admin")&&Arrays.equals(textPW.getPassword(),"admin".toCharArray())){
                     current_id = "admin";
                     System.out.println("administrator");
                     welcomePanel.setVisible(false);
                     tablePanel.setVisible(true);
+                }*/
 
-                }
-                
         		//유저 ID PW로 로그인 방법
         		String userName = textID.getText();
+        		current_id=userName;
         		String password="";
-        	
+
         		char [] pwd = textPW.getPassword();
         		for (char cha : pwd) {
 					Character.toString(cha);  //cha에 저장된 값 String으로 변환

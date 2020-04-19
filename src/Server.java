@@ -29,7 +29,6 @@ public class Server extends JFrame implements ActionListener {
     private StringTokenizer st;
 
     private void Server_start(){
-
         try {
             server_socket = new ServerSocket(80); // 27048포트 사용
 
@@ -44,7 +43,6 @@ public class Server extends JFrame implements ActionListener {
     }
 
     private void Connection() {
-
 
         Thread th = new Thread(new Runnable() {
             @Override

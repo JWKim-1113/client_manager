@@ -13,6 +13,8 @@ import java.util.Vector;
 //채팅서버
 public class Server extends JFrame implements ActionListener {
 
+    static boolean isServerOn = false;
+
     private JPanel contentPane;
     private JTextField port_tf;
     private JTextArea textArea = new JTextArea();
@@ -43,7 +45,7 @@ public class Server extends JFrame implements ActionListener {
     }
 
     private void Connection() {
-
+        isServerOn=true;
         Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -78,6 +80,7 @@ public class Server extends JFrame implements ActionListener {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
+                isServerOn=false;
                 try {
                     if(server_socket!=null){
                         server_socket.close();
@@ -122,7 +125,6 @@ public class Server extends JFrame implements ActionListener {
         stop_btn.setEnabled(false);
         this.setVisible(true);
     }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == start_btn)
@@ -134,7 +136,7 @@ public class Server extends JFrame implements ActionListener {
             stop_btn.setEnabled(true);
         }
         else if(e.getSource() == stop_btn) {
-
+            isServerOn=false;
             stop_btn.setEnabled(false);
             start_btn.setEnabled(true);
             port_tf.setEditable(true);

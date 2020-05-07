@@ -22,7 +22,6 @@ public class Client extends JFrame implements ActionListener, KeyListener {
     private JButton createroom_btn = new JButton("방만들기");
     private JButton send_btn = new JButton("전송");
 
-
     private JList User_list = new JList(); // 전체 접속자 list
     private JList Room_list = new JList(); // 전체 방목록 list
     private JTextArea Chat_area = new JTextArea(); // 채팅창 변수

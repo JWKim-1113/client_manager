@@ -167,7 +167,11 @@ public class Client_App {
         homePanel.add(btnNewButton_3); 
        
         //************************************* 관리자용 TABLE 화면 ******************************************
+
         tablePanel = new JPanel();
+        tablePanel.setBackground(Color.WHITE);
+
+//        tablePanel.setLayout(new FlowLayout());
         tablePanel.setBounds(0,0,958,551);
         String[][] data = customer.getCustomers();
         String[] headers = new String[]{"ID","UserName","Password","Name","Phone","Gender","Age","Note"};
@@ -175,7 +179,7 @@ public class Client_App {
 //        table.setModel(new DefaultTableModel(data,headers));
         table.setBounds(0,300,800,400);
         table.setRowHeight(30);
-        table.setFont(new Font("Sanserif",Font.BOLD,15));
+        table.setFont(new Font("맑은 고딕",Font.BOLD,15));
         table.setAlignmentX(0);
         table.setSize(800,400);
         //사이즈를 정했지만 안정해지는경우도있으므로 setPreferredScrollableViewportSize 로 두번크기설정
@@ -186,7 +190,7 @@ public class Client_App {
         JButton createBtn = new JButton("Create");
         createBtn.setBounds(500,600,150,40);
         createBtn.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				JPanel createPanel = new JPanel();

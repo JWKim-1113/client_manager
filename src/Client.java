@@ -42,6 +42,7 @@ public class Client extends JFrame implements ActionListener, KeyListener {
     Vector room_list = new Vector();
     StringTokenizer st;
     Boolean isConnect = false;
+
     private String My_Room; //내가 현재 있는 방 이름
 
     Client()
@@ -165,7 +166,11 @@ public class Client extends JFrame implements ActionListener, KeyListener {
         Thread th = new Thread(new Runnable() {
             @Override
             public void run() {
+
                 while(true){
+                    if(!Server.isServerOn) {
+                        JOptionPane.showMessageDialog(null, "서버와 접속 끊어짐","알림",JOptionPane.ERROR_MESSAGE);
+                    }
                     try {
                         String msg = dis.readUTF(); //메세지 수신
                         System.out.println("서버로부터 수신된 메세지 : "+msg);
@@ -178,7 +183,7 @@ public class Client extends JFrame implements ActionListener, KeyListener {
                             dos.close();
                             dis.close();
                             socket.close();
-                            JOptionPane.showMessageDialog(null, "서버와 접속 끊어짐","알림",JOptionPane.ERROR_MESSAGE);
+//                            JOptionPane.showMessageDialog(null, "서버와 접속 끊어짐","알림",JOptionPane.ERROR_MESSAGE);
                         }catch (IOException e1){}
                         break;
 

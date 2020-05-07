@@ -19,9 +19,11 @@ public class Client_App {
     private JPanel tablePanel;
     private JPanel homePanel;
     static String current_id = "";
+    static String userName;
     private int loginResult=2;
     private String firstCheck ="1";
     private JTextField textID = new JTextField(10);
+    
     public static void main(String[] args) {
         EventQueue.invokeLater(new Runnable() {
             @Override
@@ -155,7 +157,14 @@ public class Client_App {
         btnNewButton_1.setFont(new Font("맑은 고딕",Font.BOLD,15));
         btnNewButton_1.setBounds(46, 170, 170, 50);
         homePanel.add(btnNewButton_1);
-        
+        btnNewButton_1.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new Board();
+				
+			}
+		});
         JButton btnNewButton_2 = new JButton("");
         btnNewButton_2.setFont(new Font("맑은 고딕",Font.BOLD,15));
         btnNewButton_2.setBounds(46, 240, 170, 50);
@@ -584,7 +593,7 @@ public class Client_App {
         		String userName = textID.getText();
         		current_id=userName;
         		String password="";
-
+        		
         		char [] pwd = textPW.getPassword();
         		for (char cha : pwd) {
 					Character.toString(cha);  //cha에 저장된 값 String으로 변환

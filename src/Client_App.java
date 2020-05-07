@@ -4,17 +4,15 @@ import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
+import java.io.IOException;
 import java.util.Arrays;
- //test
+
+import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
+//test
 
 public class Client_App {
-
-    private JFrame frame;
-    private JPanel welcomePanel;
+    public static JFrame frame;
     private JPanel profilePanel;
     private JPanel tablePanel;
     private JPanel homePanel;
@@ -38,6 +36,7 @@ public class Client_App {
         });
     }
     public Client_App(){
+        TrayIconApp trayIconApp = new TrayIconApp();
         initialize();
     }
 
@@ -50,16 +49,23 @@ public class Client_App {
 
         frame = new JFrame();
         frame.setBounds(100, 100, 1000, 706);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 
 		ImagePanel welcomePanel = new ImagePanel(new ImageIcon("./img/background2_1.png").getImage());
-        
+
 //		JPanel profilePanel, tablePanel, homePanel;
 
         //로그인화면(첫화면) panel
-        
+
         frame.getContentPane().add(welcomePanel);
+
+        //창 닫았을때
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                frame.setVisible(false);
+            }
+        });
 
         //************************************* profile 등록 화면 ******************************************
         profilePanel = new JPanel();
@@ -673,7 +679,7 @@ public class Client_App {
         frame.setSize(welcomePanel.getWidth(),welcomePanel.getHeight());
         frame.setResizable(true);
         frame.setLocationRelativeTo(null);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
     
     

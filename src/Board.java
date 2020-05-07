@@ -41,7 +41,7 @@ public class Board extends JFrame {
 	private void initialize() {
 		Board_list board_list = new Board_list();
 //		board_list.deleteBoardTable();
-//		board_list.createBoardTable();
+		board_list.createBoardTable();
 		setBounds(300,100,600,330);
 		setTitle("게시판");
 		boardPane = new JPanel();

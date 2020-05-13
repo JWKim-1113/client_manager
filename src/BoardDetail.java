@@ -82,7 +82,7 @@ public class BoardDetail extends JFrame {
 				
 				if(Client_App.current_id.equals(writer)) {
 					board_list.deleteBoard(id,writer);
-					
+					Board board= new Board();
 				}else {
 					JOptionPane.showMessageDialog(null,"삭제기능은 작성자만 할수있습니다!!");
 					
@@ -102,7 +102,7 @@ public class BoardDetail extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				
+				Board board=new Board();
 			}
 		});
         getContentPane().add(btnClose);

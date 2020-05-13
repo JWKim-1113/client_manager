@@ -55,8 +55,7 @@ public class BoardInsert extends JFrame {
 				board_list.createBoard(titles,txtarea,username);
 				
 				setVisible(false);
-				
-				
+				Board board=new Board();
 			}
 		});
         
@@ -70,7 +69,7 @@ public class BoardInsert extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);
-				
+				Board board=new Board();
 			}
 		});
         getContentPane().add(btnClose);

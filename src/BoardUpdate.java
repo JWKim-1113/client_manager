@@ -53,6 +53,7 @@ public class BoardUpdate extends JFrame{
 				
 				board_list.updateBoard(id,titles,txtarea,writer);
 				setVisible(false);
+				Board board= new Board();
 			}
 		});
         

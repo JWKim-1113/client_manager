@@ -15,8 +15,9 @@ public class BoardDetail extends JFrame {
 	
 	Board_list board_list = new Board_list();
 	
-	public BoardDetail(Object id, String titles, String content, Object writer) {
+	public BoardDetail(Object id, String titles, Object writer) {
 		
+		String content = Board_list.getContent(id,titles,writer); //content 찾기
 		
 		setBounds(new Rectangle(300,10,450,280));
 		setTitle("글상세 내용");

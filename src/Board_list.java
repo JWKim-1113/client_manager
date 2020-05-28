@@ -10,7 +10,7 @@ public class Board_list {
 	public static String[][] getBoards(){
 		try {
 			Connection con = getConnection();
-			PreparedStatement statement = con.prepareStatement("SELECT num,title,content,writer,hits,regdate FROM board");
+			PreparedStatement statement = con.prepareStatement("SELECT num,title,writer,hits,regdate FROM board");
 			ResultSet results =statement.executeQuery();
 			ArrayList<String[]> list = new ArrayList<String[]>();
             while(results.next()) {
@@ -18,13 +18,13 @@ public class Board_list {
                 list.add(new String[]{
                         results.getString("num"),
                         results.getString("title"),
-                        results.getString("content"),
+//                        results.getString("content"),
                         results.getString("writer"),
                         results.getString("hits"),
                         results.getString("regdate")
                 });
             }
-            String[][] arr = new String[list.size()][6];
+            String[][] arr = new String[list.size()][5];
             return list.toArray(arr);
 		}catch(Exception e ) {
 			System.out.println(e.getMessage());
@@ -40,7 +40,7 @@ public class Board_list {
 					"CREATE TABLE IF NOT EXISTS "+
 						"board(num int UNSIGNED NOT NULL AUTO_INCREMENT,"+
 						"title varChar(50),"+
-						"content varChar(5000),"+
+//						"content varChar(5000),"+
 						"writer varChar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,"+
 						"hits int UNSIGNED NOT NULL DEFAULT 0,"+
 						"regdate DATETIME DEFAULT CURRENT_TIMESTAMP,"+
@@ -125,7 +125,7 @@ public class Board_list {
 			Connection con =getConnection();
 			PreparedStatement hitBoard= con.prepareStatement(
 					"UPDATE board SET "
-					+ "hits =hits + 1 "
+					+ "hits = hits + 1 "
 					+ "WHERE num=? AND writer=?"
 					);
 			hitBoard.setString(1, (String)num);
@@ -159,6 +159,39 @@ public class Board_list {
 		}finally {
 			System.out.println("게시글 수정 완료!!");
 		}
+		
+	}
+
+	public static String getContent(Object id, String titles, Object writer) {
+		try {
+			Connection con =getConnection();
+			PreparedStatement getContent =con.prepareStatement(
+					"SELECT content "
+					+ "FROM board  "
+					+ "WHERE num=? AND writer=?"
+					
+					);
+			getContent.setString(1, (String)id);
+			getContent.setString(2, (String)writer);
+			ResultSet result =getContent.executeQuery();
+			
+			ArrayList<String[]> list = new ArrayList<String[]>();
+			
+			while(result.next()) {
+				list.add(new String[]{ 
+	                    result.getString("content"),
+	 
+	            });				 
+			}
+			return list.toString();
+				
+		}catch(Exception e ) {
+			System.out.println(e.getMessage());
+		}finally {
+			System.out.println("게시글 수정 완료!!");
+		}
+		return null;
+		
 		
 	}
 

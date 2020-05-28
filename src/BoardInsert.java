@@ -7,6 +7,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import java.awt.Color;
+import javax.swing.JPanel;
+import java.awt.SystemColor;
+import java.awt.Font;
+import javax.swing.JTextPane;
 
 public class BoardInsert extends JFrame {
 	
@@ -15,35 +20,32 @@ public class BoardInsert extends JFrame {
 
 	
 	public BoardInsert() {
+		getContentPane().setBackground(new Color(245, 245, 245));
+		getContentPane().setForeground(Color.BLACK);
 		
 		
-		setBounds(new Rectangle(300,10,450,280));
+		
+		setBounds(new Rectangle(300,10,600,500));
 		setTitle("게시글 등록");
-		
+		setBackground(Color.WHITE);
 		getContentPane().setLayout(null);
 		
-		
-		JLabel lblNewLabel = new JLabel("글제목");
-		lblNewLabel.setBounds(40,10,57,15);
-		getContentPane().add(lblNewLabel);
-		
-		JTextField title = new JTextField("글제목입니다.");
-		title.setBounds(90,10,200,20);
+		JTextField title = new JTextField("제목을 입력해 주세요.");
+		title.setFont(new Font("나눔바른고딕 Light", Font.BOLD, 15));
+		title.setBounds(76,25,200,34);
 		getContentPane().add(title);
 		title.setColumns(10);
 		
-		JLabel lblNewLabel_1 = new JLabel("글내용");
-		lblNewLabel_1.setBounds(40,50,57,15);
-		getContentPane().add(lblNewLabel_1);
-		
-		JTextArea textArea = new JTextArea("글내용 글내용..");
+		JTextArea textArea = new JTextArea("");
+		textArea.setFont(new Font("나눔바른고딕 Light", Font.BOLD, 13));
 		textArea.setLineWrap(true);
         textArea.setRows(7);
-        textArea.setBounds(90, 50, 300, 69);
+        textArea.setBounds(76, 71, 466, 205);
         getContentPane().add(textArea);
 
-        JButton btnWrite = new JButton("작성완료");
-        btnWrite.setBounds(100,200,116,23);
+        JButton btnWrite = new JButton("등록");
+        btnWrite.setFont(new Font("나눔바른고딕 Light", Font.PLAIN, 15));
+        btnWrite.setBounds(467,288,75,30);
         btnWrite.addActionListener(new ActionListener() {
 			
 			@Override
@@ -62,8 +64,9 @@ public class BoardInsert extends JFrame {
         getContentPane().add(btnWrite);
         
         
-        JButton btnClose = new JButton("닫기");
-        btnClose.setBounds(230,200,76,23);
+        JButton btnClose = new JButton("취소");
+        btnClose.setFont(new Font("나눔바른고딕 Light", Font.PLAIN, 15));
+        btnClose.setBounds(389,288,75,30);
         btnClose.addActionListener(new ActionListener() {
 			
 			@Override
@@ -78,5 +81,4 @@ public class BoardInsert extends JFrame {
 		
 		
 	}
-
 }
